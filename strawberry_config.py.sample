@@ -1,6 +1,7 @@
 from target import Target
 
 class Config:
+  tests_dir = "integration/javascript/iPhone"
   targets = [Target(name="foo", scheme="Foo Scheme", bundle_id="com.example.MyApp-Foo"), 
              Target(name="bar", scheme="Bar Scheme", bundle_id="com.example.MyApp-Bar")]
 

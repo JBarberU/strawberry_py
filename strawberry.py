@@ -20,6 +20,7 @@ import argparse
 from command import run_cmd 
 from target import Target, sdks
 from build import build
+from xc_test import test  
 
 def print_targets():
   print("Available targets:\n")
@@ -41,6 +42,8 @@ def main():
   parser.add_argument('-s', '--sdk', default=sdks[0], help='The SDK')
   parser.add_argument('--list-sdks', action='store_true', help='Lists the available SDKs')
   parser.add_argument('-r', '--run', action='store_true', help='Run after build')
+  parser.add_argument('-b', '--build', action='store_true', help='Build')
+  parser.add_argument('--test', action='store_true', help='Run tests')
   parser.add_argument('-v', '--verbose', action='store_true', help='Prints output for all commands')
   parser.add_argument('-d', '--debug', action='store_true', help='Print debug information')
   args = parser.parse_args()
@@ -55,6 +58,10 @@ def main():
     print_sdks()
     exit(0)
 
+  if args.target == None:
+    print("You need to provide a target, try --list-targets to see which are available or --help to see the help")
+    exit(1)
+
   target_li = [t for t in Config.targets if t.name == args.target]
   if len(target_li) != 1:
     print("Invalid target: %s" % args.target)
@@ -65,7 +72,11 @@ def main():
     print("Invalid sdk: %s" % sdk_in)
     exit(1)
 
-  build(args.clean, target_li[0], sdk_li[0], args.run, args.verbose)
+  if args.build:
+    build(args.clean, target_li[0], sdk_li[0], args.run, args.verbose)
+
+  if args.test:
+    test(target_li[0], sdk_li[0], verbose=args.verbose)
 
 if __name__ == '__main__': 
   main()
