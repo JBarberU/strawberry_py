@@ -29,6 +29,7 @@ from target import Target, sdks
 from build import build
 from xc_test import test  
 from setup import setup
+from log import Log
 
 def print_targets():
   print("Available targets:\n")
@@ -85,6 +86,8 @@ def main():
 
   if args.test:
     test(target_li[0], sdk_li[0], verbose=args.verbose)
+
+  Log.msg("Done!")
 
 if __name__ == '__main__': 
   main()
