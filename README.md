@@ -29,11 +29,19 @@ testing
 Works:
 
 * Building iOS project 
+* Running the tests
+* Generating commandline test reports
+* Generating simple juint test reports
+* Continue other tests after one fails
+
+In progress:
+
+* Generating alternative test reports
+* Add ability to retry test
+* Add ability to uninstall app between tests 
 
 Doesn't work:
 
-* Running the application
-* Running the tests
+* Running the application (without testing)
 * Generating build reports
-* Generating test reports
 
