@@ -5,21 +5,17 @@ import sys
 from log import Log
 from colors import Colors 
 
-def run_cmd_ret_output(args, verbose):
+def run_cmd_ret_output(args, formatter):
   p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-  lines = []
 
   while True:
     line = p.stdout.readline()
     if line != '':
-      if verbose:
-        sys.stdout.write(line)
-
-      lines.append(line)
+      formatter.put_line(line)
     else:
       break
   p.wait()
-  return (p.returncode, lines)
+  return p.returncode
 
 def run_cmd(args, verbose, show_progress=False, acceptable_error_codes=[0]):
   if not operator.contains(acceptable_error_codes, 0):
