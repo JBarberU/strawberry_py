@@ -2,6 +2,8 @@
 
 import sys 
 import os 
+import argparse
+
 f_path = os.path.dirname(__file__)
 sys.path += [".", 
              f_path, 
@@ -13,14 +15,20 @@ from colors import Colors
 try:
   from strawberry_config import Config 
 except ImportError:
-  print("%sError:%s Unable to find strawberry_config.py, try copying strawberry_config.py.sample and edit it to suit your needs" %(Colors.RED, Colors.NORMAL))
-  exit(1)
+  sys.stdout.write("%sError%s: Unable to find strawberry_config.py, would you like to run setup? Y/N: " %(Colors.RED, Colors.NORMAL))
+  ans = raw_input()
+  if ans == "y" or ans == "Y":
+    from setup import setup
+    setup()
+    exit(0)
+  else:
+    exit(1)
 
-import argparse
 from command import run_cmd 
 from target import Target, sdks
 from build import build
 from xc_test import test  
+from setup import setup
 
 def print_targets():
   print("Available targets:\n")
