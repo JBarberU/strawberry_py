@@ -1,0 +1,3 @@
+class TestFailureError(RuntimeError):
+  pass
+

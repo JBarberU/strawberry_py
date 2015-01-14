@@ -1,4 +1,6 @@
 import sys
+import re
+from xc_exception import TestFailureError
 from colors import Colors
 from meta_line import MetaLine
 from line import Line
@@ -7,10 +9,14 @@ class OutputPipe:
   meta_lines = []
   verbose = True
   pretty = True
+  unacceptable_output = []
 
-  def __init__(self, verbose = True, pretty = True):
+# unacceptable_output is usful for failing based on command output, rather than
+# exitcode
+  def __init__(self, verbose = True, pretty = True, unacceptable_output=[]):
     self.verbose = verbose
     self.pretty = pretty
+    self.unacceptable_output = unacceptable_output
 
   def put_line(self, line):
     m_line = MetaLine(line)
@@ -23,4 +29,8 @@ class OutputPipe:
         output = line
 
       sys.stdout.write(output)
+
+    for uo in self.unacceptable_output:
+      if re.compile(uo).match(line):
+        raise TestFailureError(line)
 

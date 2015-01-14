@@ -1,3 +1,4 @@
+from xc_exception import TestFailureError
 from output_pipe import OutputPipe
 from command import run_cmd_ret_output
 from strawberry_config import Config
@@ -46,17 +47,20 @@ class TestCase:
     print("Running test: %s" % self.file_name)
 
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
-    pipe = OutputPipe()
-    ret_code = run_cmd_ret_output(["instruments",
-                                   #"-v",
-                                   "-D", instruments_trace_dir,
-                                   "-t", "Automation",
-                                   "-w", "iPhone 5s (8.1 Simulator",
-                                   "%s/Build/Products/Release-iphonesimulator/%s.app" %
-                                     (Config.build_dir, self.target.scheme),
-                                   "-e", "UIASCRIPT", "%s/%s" %(Config.tests_dir, self.file_name),
-                                   "-e", "UIARESULTSPATH", test_results_dir,
-                                  ], pipe)
+    pipe = OutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
+    try:
+      ret_code = run_cmd_ret_output(["instruments",
+                                     #"-v",
+                                     "-D", instruments_trace_dir,
+                                     "-t", "Automation",
+                                     "-w", "iPhone 5s (8.1 Simulator",
+                                     "%s/Build/Products/Release-iphonesimulator/%s.app" %
+                                       (Config.build_dir, self.target.scheme),
+                                     "-e", "UIASCRIPT", "%s/%s" %(Config.tests_dir, self.file_name),
+                                     "-e", "UIARESULTSPATH", test_results_dir,
+                                    ], pipe)
+    except TestFailureError:
+      ret_code = 1
 
     self.result = ret_code == 0
     self.output = pipe.meta_lines
