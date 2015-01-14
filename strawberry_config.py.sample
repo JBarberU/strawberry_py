@@ -8,3 +8,14 @@ class Config:
   targets = [Target(name="foo", scheme="Foo Scheme", bundle_id="com.example.MyApp-Foo"), 
              Target(name="bar", scheme="Bar Scheme", bundle_id="com.example.MyApp-Bar")]
 
+  # These all correspond to the commandline arguments to strawberry_py
+  clean = False
+  target = None
+  sdk = "iphonesimulator8.1"
+  run = False
+  build = True
+  test = True
+  focus = None
+  exclude = None
+  verbose = False
+  debug = False

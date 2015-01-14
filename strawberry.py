@@ -15,14 +15,9 @@ from colors import Colors
 try:
   from strawberry_config import Config 
 except ImportError:
-  sys.stdout.write("%sError%s: Unable to find strawberry_config.py, would you like to run setup? Y/N: " %(Colors.RED, Colors.NORMAL))
-  ans = raw_input()
-  if ans == "y" or ans == "Y":
     from setup import setup
     setup()
     exit(0)
-  else:
-    exit(1)
 
 from command import run_cmd 
 from target import Target, sdks
@@ -60,8 +55,29 @@ def main():
   parser.add_argument("-v", "--verbose", action="store_true", help="Prints output for all commands")
   parser.add_argument("-d", "--debug", action="store_true", help="Print debug information")
   args = parser.parse_args()
-  debug = args.debug
-  if debug:
+
+  if args.clean:
+    Config.clean = True
+  if args.target:
+    Config.target = args.target
+  if args.sdk:
+    Config.sdk = args.sdk
+  if args.run:
+    Config.run = True
+  if args.build:
+    Config.build = True
+  if args.test:
+    Config.test = True
+  if args.focus:
+    Config.focus = args.focus
+  if args.exclude:
+    Config.exclude = args.exclude
+  if args.verbose:
+    Config.verbose = True
+  if args.debug:
+    Config.debug = True
+
+  if Config.debug:
     print("Args: " + str(args))
 
   if args.list_targets:
@@ -71,32 +87,32 @@ def main():
     print_sdks()
     exit(0)
 
-  if args.target == None:
+  if Config.target == None:
     print("You need to provide a target, try --list-targets to see which are available or --help to see the help")
     exit(1)
 
-  target_li = [t for t in Config.targets if t.name == args.target]
+  target_li = [t for t in Config.targets if t.name == Config.target]
   if len(target_li) != 1:
-    print("Invalid target: %s" % args.target)
+    print("Invalid target: %s" % Config.target)
     exit(1)
 
-  sdk_li = [s for s in sdks if s == args.sdk]
+  sdk_li = [s for s in sdks if s == Config.sdk]
   if len(sdk_li) != 1:
     print("Invalid sdk: %s" % sdk_in)
     exit(1)
 
-  if args.build:
-    build(args.clean, target_li[0], sdk_li[0], args.run, args.verbose)
+  if Config.build:
+    build(Config.clean, target_li[0], sdk_li[0], Config.run, Config.verbose)
 
-  if args.test:
-    if args.focus:
-      focus_object = TestFocusObject(args.focus)
-    elif args.exclude:
-      focus_object = TestExcludeObject(args.exclude)
+  if Config.test:
+    if Config.focus:
+      focus_object = TestFocusObject(Config.focus)
+    elif Config.exclude:
+      focus_object = TestExcludeObject(Config.exclude)
     else:
       focus_object = None
 
-    test(target_li[0], sdk_li[0], focus_object, verbose=args.verbose)
+    test(target_li[0], sdk_li[0], focus_object, verbose=Config.verbose)
 
   Log.msg("Done!")
 
