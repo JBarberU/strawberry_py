@@ -8,7 +8,8 @@ prefixes = [
             ("Debug", "", Colors.BLUE),
             ("Error", "", Colors.RED),
             ("Fail", "", Colors.RED),
-            ("Duration", "s;", Colors.BLUE)
+            ("Duration", "s;", Colors.BLUE),
+            ("logElementTree", "", Colors.BLUE),
            ]
 
 class MetaLine(Line):
