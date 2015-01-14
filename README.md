@@ -31,7 +31,7 @@ Works:
 * Building iOS project 
 * Running the tests
 * Generating commandline test reports
-* Generating simple juint test reports
+* Generating simple junit test reports
 * Generating simple text test reports
 * Continue other tests after one fails
 * Focus on a given set of tests
