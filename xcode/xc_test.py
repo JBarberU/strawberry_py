@@ -15,7 +15,7 @@ class TestObjectBase:
         ret += [f]
       else:
         ret += ["%s.js" % f]
-    
+
     return ret
 
   def get_tests(self, tests):
@@ -48,15 +48,15 @@ class TestFocusObject(TestObjectBase):
     return ret
 
 formatter_map = {
-                  'junit': JUnitResultFormatter, 
-                  'text': TextResultFormatter, 
+                  'junit': JUnitResultFormatter,
+                  'text': TextResultFormatter,
                 }
 
 def test(target, sdk, focus_object=None, verbose=True):
   try:
     tests_dir = Config.tests_dir
   except AttributeError:
-    tests_dir =  "integration/javascript/iphone" 
+    tests_dir =  "integration/javascript/iphone"
     Log.warn("tests_dir not set, defaulting to: %s" % tests_dir)
 
   test_files = listdir(tests_dir)
@@ -66,7 +66,7 @@ def test(target, sdk, focus_object=None, verbose=True):
 
   if focus_object:
     tests = focus_object.get_tests(tests)
-    
+
   for tc in tests:
     tc.run()
 

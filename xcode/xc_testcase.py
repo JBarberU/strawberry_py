@@ -47,12 +47,12 @@ class TestCase:
 
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = OutputPipe()
-    ret_code = run_cmd_ret_output(["instruments", 
+    ret_code = run_cmd_ret_output(["instruments",
                                    #"-v",
-                                   "-D", instruments_trace_dir, 
-                                   "-t", "Automation", 
+                                   "-D", instruments_trace_dir,
+                                   "-t", "Automation",
                                    "-w", "iPhone 5s (8.1 Simulator",
-                                   "%s/Build/Products/Release-iphonesimulator/%s.app" % 
+                                   "%s/Build/Products/Release-iphonesimulator/%s.app" %
                                      (Config.build_dir, self.target.scheme),
                                    "-e", "UIASCRIPT", "%s/%s" %(Config.tests_dir, self.file_name),
                                    "-e", "UIARESULTSPATH", test_results_dir,

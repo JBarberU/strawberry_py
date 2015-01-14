@@ -3,7 +3,7 @@ from line import Line
 import re
 
 prefixes = [
-            ("Start", "", Colors.GREEN),  
+            ("Start", "", Colors.GREEN),
             ("Pass", "", Colors.GREEN),
             ("Debug", "", Colors.BLUE),
             ("Error", "", Colors.RED),

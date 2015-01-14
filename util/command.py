@@ -1,9 +1,9 @@
 import subprocess
-import operator  
+import operator
 import sys
 
 from log import Log
-from colors import Colors 
+from colors import Colors
 
 def run_cmd_ret_output(args, formatter):
   p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

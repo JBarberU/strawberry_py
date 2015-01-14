@@ -19,7 +19,7 @@ class JUnitResultFormatter(ResultFormatterBase):
           err_log += "%s: %s" % (ml.prefix, ml.body)
 
      # We should be able to extract a more sensible test_name
-     # but we need to think about what we do with time then... 
+     # but we need to think about what we do with time then...
      # if len(tc.output) and tc.output[0].prefix == "Start":
      #   test_name = tc.output[0].body.replace("\n", "")
      # else:

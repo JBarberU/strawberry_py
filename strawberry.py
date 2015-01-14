@@ -1,28 +1,28 @@
 #!/usr/bin/env python
 
-import sys 
-import os 
+import sys
+import os
 import argparse
 
 f_path = os.path.dirname(__file__)
-sys.path += [".", 
-             f_path, 
-             "%s/util" % f_path, 
+sys.path += [".",
+             f_path,
+             "%s/util" % f_path,
              "%s/xcode" % f_path]
 
 from colors import Colors
 
 try:
-  from strawberry_config import Config 
+  from strawberry_config import Config
 except ImportError:
     from setup import setup
     setup()
     exit(0)
 
-from command import run_cmd 
+from command import run_cmd
 from target import Target, sdks
 from build import build
-from xc_test import test  
+from xc_test import test
 from xc_test import TestFocusObject
 from xc_test import TestExcludeObject
 from setup import setup

@@ -1,7 +1,7 @@
 # Strawberry_py
 
-Strawberry_py is a tool made for simplifying the building and testing of iOS 
-applications, written in python. 
+Strawberry_py is a tool made for simplifying the building and testing of iOS
+applications, written in python.
 
 It uses UIAutomation and aims to make it easy as pie, pun intended, to build
 and run tests. The idea for this project was shamelessly based on bwoken.
@@ -21,14 +21,14 @@ alternative.
 
 * Work out of the box on OS X
 * Being small and to the point/easy to extend
-* Being useful for building iOS applications, even when you don't want to do any 
+* Being useful for building iOS applications, even when you don't want to do any
 testing
 
 ### Current status
 
 Works:
 
-* Building iOS project 
+* Building iOS project
 * Running the tests
 * Generating commandline test reports
 * Generating simple junit test reports
@@ -40,7 +40,7 @@ Works:
 In progress:
 
 * Add ability to retry test
-* Add ability to uninstall app between tests 
+* Add ability to uninstall app between tests
 
 Doesn't work:
 

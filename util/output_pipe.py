@@ -5,7 +5,7 @@ from line import Line
 
 class OutputPipe:
   meta_lines = []
-  verbose = True 
+  verbose = True
   pretty = True
 
   def __init__(self, verbose = True, pretty = True):

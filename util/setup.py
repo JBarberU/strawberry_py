@@ -1,5 +1,5 @@
 import readline
-import sys 
+import sys
 import shutil
 import os
 
@@ -9,7 +9,7 @@ def get_var(msg, default):
   if ret == "":
     return default
   return ret
-  
+
 def setup():
   if not os.path.exists("strawberry_config.py"):
     sys.stdout.write("You're missing strawberry_config.py at %s, do you want to create it? Y/N: " % os.getcwd())
