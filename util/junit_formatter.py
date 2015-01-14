@@ -4,8 +4,10 @@ from meta_line import MetaLine
 
 class JUnitResultFormatter(ResultFormatterBase):
 
+  file_extension = "xml"
+
   def format_result(self, test_cases):
-    meta_lines = ["<testsuite>\n"]
+    lines = ["<testsuite>\n"]
 
     for tc in test_cases:
       duration = 0
@@ -25,17 +27,17 @@ class JUnitResultFormatter(ResultFormatterBase):
 
       test_name = tc.file_name
 
-      meta_lines.append("\t<testcase classname=\"%s\" name=\"%s\" time=\"%s\">\n" % (tc.file_name, test_name, duration))
+      lines.append("\t<testcase classname=\"%s\" name=\"%s\" time=\"%s\">\n" % (tc.file_name, test_name, duration))
 
       if not tc.result:
         if not len(tc.output):
-          meta_lines.append("\t\t<skipped />\n")
+          lines.append("\t\t<skipped />\n")
         else:
-          meta_lines.append("\t\t<failure type=\"TestFailed\">%s</failure>\n" % err_log)
+          lines.append("\t\t<failure type=\"TestFailed\">%s</failure>\n" % err_log)
 
-      meta_lines.append("\t</testcase>\n")
+      lines.append("\t</testcase>\n")
 
-    meta_lines.append("</testsuite>\n")
+    lines.append("</testsuite>\n")
 
-    return meta_lines
+    return lines
 

@@ -4,6 +4,7 @@ from strawberry_config import Config
 from xc_testcase import TestCase
 from commandline_formatter import CommandlineResultFormatter
 from junit_formatter import JUnitResultFormatter
+from text_formatter import TextResultFormatter
 
 class TestObjectBase:
 
@@ -46,6 +47,10 @@ class TestFocusObject(TestObjectBase):
 
     return ret
 
+formatter_map = {
+                  'junit': JUnitResultFormatter, 
+                  'text': TextResultFormatter, 
+                }
 
 def test(target, sdk, focus_object=None, verbose=True):
   try:
@@ -65,10 +70,16 @@ def test(target, sdk, focus_object=None, verbose=True):
   for tc in tests:
     tc.run()
 
-  formatter = JUnitResultFormatter()
-  lines = formatter.format_result(tests)
-  with open(Config.test_report_file, "w") as f:
-    f.writelines(lines)
+  if Config.test_report_format:
+    formatter = formatter_map[Config.test_report_format]()
+    lines = formatter.format_result(tests)
+    if Config.test_report_file[-len(formatter.file_extension):] != formatter.file_extension:
+      file_name = "%s.%s" % (Config.test_report_file, formatter.file_extension)
+    else:
+      file_name = Config.test_report_file
+
+    with open(file_name, "w") as f:
+      f.writelines(lines)
 
 
 
