@@ -32,13 +32,13 @@ Works:
 * Running the tests
 * Generating commandline test reports
 * Generating simple juint test reports
+* Generating simple text test reports
 * Continue other tests after one fails
 * Focus on a given set of tests
 * Exclude a given set of tests
 
 In progress:
 
-* Generating alternative test reports
 * Add ability to retry test
 * Add ability to uninstall app between tests 
 
