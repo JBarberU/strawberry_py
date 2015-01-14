@@ -23,12 +23,15 @@ class TextResultFormatter(ResultFormatterBase):
         elif ml.prefix == "Fail" or ml.prefix == "Error":
           err_log += "%s: %s" % (ml.prefix, ml.body)
 
-      lines += ["testcase: %s, result: %s, time: %s\n" % (tc.file_name, tc.result, duration)]
       if tc.result:
         num_pass += 1
+        result = "Pass"
       else:
         num_fail += 1
+        result = "Fail"
       sum_duration += duration
+
+      lines += ["%s: %s (%s\s)\n" % (result, tc.file_name, duration)]
 
     lines += ["Summary: failed: %s, passed: %s, total: %s, time: %s" % (num_fail, num_pass, (num_fail + num_pass), sum_duration)]
 
