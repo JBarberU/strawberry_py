@@ -3,8 +3,17 @@ from target import Target
 class Config:
   tests_dir = "integration/javascript/iphone"
   build_dir = "build"
+
   test_report_file = "test-report.xml"
+
+  # Uncomment if you don't want to save the results from instruments
+  # test_results_dir = None
   test_results_dir = "test_results"
+
+  # Uncomment if you don't want to save the trace from instruments 
+  # instruments_trace_dir = None
+  instruments_trace_dir = "instruments"
+
   targets = [Target(name="foo", scheme="Foo Scheme", bundle_id="com.example.MyApp-Foo"), 
              Target(name="bar", scheme="Bar Scheme", bundle_id="com.example.MyApp-Bar")]
 
