@@ -47,22 +47,22 @@ def print_sdks():
 
 def main():
   parser = argparse.ArgumentParser()
-  parser.add_argument('-c', '--clean', action='store_true', help='Clean befroe build')
-  parser.add_argument('-t', '--target', help='The target')
-  parser.add_argument('--list-targets', action='store_true', help='Prints the available targets')
-  parser.add_argument('-s', '--sdk', default=sdks[0], help='The SDK')
-  parser.add_argument('--list-sdks', action='store_true', help='Lists the available SDKs')
-  parser.add_argument('-r', '--run', action='store_true', help='Run after build')
-  parser.add_argument('-b', '--build', action='store_true', help='Build')
-  parser.add_argument('--test', action='store_true', help='Run tests')
-  parser.add_argument('-v', '--verbose', action='store_true', help='Prints output for all commands')
-  parser.add_argument('-d', '--debug', action='store_true', help='Print debug information')
+  parser.add_argument("-c", "--clean", action="store_true", help="Clean befroe build")
+  parser.add_argument("-t", "--target", help="The target")
+  parser.add_argument("--list-targets", action="store_true", help="Prints the available targets")
+  parser.add_argument("-s", "--sdk", default=sdks[0], help="The SDK")
+  parser.add_argument("--list-sdks", action="store_true", help="Lists the available SDKs")
+  parser.add_argument("-r", "--run", action="store_true", help="Run after build")
+  parser.add_argument("-b", "--build", action="store_true", help="Build")
+  parser.add_argument("--test", action="store_true", help="Run tests")
   parser.add_argument("--focus", nargs="+", help="The target")
   parser.add_argument("--exclude", nargs="+", help="The target")
+  parser.add_argument("-v", "--verbose", action="store_true", help="Prints output for all commands")
+  parser.add_argument("-d", "--debug", action="store_true", help="Print debug information")
   args = parser.parse_args()
   debug = args.debug
   if debug:
-    print('Args: ' + str(args))
+    print("Args: " + str(args))
 
   if args.list_targets:
     print_targets()
@@ -100,6 +100,6 @@ def main():
 
   Log.msg("Done!")
 
-if __name__ == '__main__': 
+if __name__ == "__main__":
   main()
 
