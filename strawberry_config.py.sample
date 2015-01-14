@@ -1,9 +1,10 @@
 from target import Target
 
 class Config:
-  tests_dir = "integration/javascript/iPhone"
+  tests_dir = "integration/javascript/iphone"
   build_dir = "build"
-  report_file = "test-report.xml"
+  test_report_file = "test-report.xml"
+  test_results_dir = "test_results"
   targets = [Target(name="foo", scheme="Foo Scheme", bundle_id="com.example.MyApp-Foo"), 
              Target(name="bar", scheme="Bar Scheme", bundle_id="com.example.MyApp-Bar")]
 

@@ -28,6 +28,8 @@ from command import run_cmd
 from target import Target, sdks
 from build import build
 from xc_test import test  
+from xc_test import TestFocusObject
+from xc_test import TestExcludeObject
 from setup import setup
 from log import Log
 
@@ -55,6 +57,8 @@ def main():
   parser.add_argument('--test', action='store_true', help='Run tests')
   parser.add_argument('-v', '--verbose', action='store_true', help='Prints output for all commands')
   parser.add_argument('-d', '--debug', action='store_true', help='Print debug information')
+  parser.add_argument("--focus", nargs="+", help="The target")
+  parser.add_argument("--exclude", nargs="+", help="The target")
   args = parser.parse_args()
   debug = args.debug
   if debug:
@@ -85,7 +89,14 @@ def main():
     build(args.clean, target_li[0], sdk_li[0], args.run, args.verbose)
 
   if args.test:
-    test(target_li[0], sdk_li[0], verbose=args.verbose)
+    if args.focus:
+      focus_object = TestFocusObject(args.focus)
+    elif args.exclude:
+      focus_object = TestExcludeObject(args.exclude)
+    else:
+      focus_object = None
+
+    test(target_li[0], sdk_li[0], focus_object, verbose=args.verbose)
 
   Log.msg("Done!")
 
