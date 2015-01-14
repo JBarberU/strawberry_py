@@ -11,7 +11,11 @@ def run_cmd_ret_output(args, formatter):
   while True:
     line = p.stdout.readline()
     if line != '':
-      formatter.put_line(line)
+      try:
+        formatter.put_line(line)
+      except RuntimeError as e:
+        p.terminate
+        raise e
     else:
       break
   p.wait()
