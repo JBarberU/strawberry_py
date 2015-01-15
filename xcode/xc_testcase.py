@@ -1,3 +1,4 @@
+from number_helper import number_string_with_postfix
 from xc_exception import TestFailureError
 from output_pipe import OutputPipe
 from command import run_cmd_ret_output
@@ -13,6 +14,7 @@ class TestCase:
   target = None
   time_spent = ""
   output = []
+  run_number = 0
 
   def __init__(self, file_name_in, target):
     self.file_name = file_name_in
@@ -44,7 +46,8 @@ class TestCase:
     return (test_results_dir, instruments_trace_dir)
 
   def run(self):
-    print("Running test: %s" % self.file_name)
+    self.run_number += 1
+    print("Running test: %s, %s try" % (self.file_name, number_string_with_postfix(self.run_number)))
 
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = OutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])

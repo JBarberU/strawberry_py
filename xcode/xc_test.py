@@ -52,7 +52,7 @@ formatter_map = {
                   'text': TextResultFormatter,
                 }
 
-def test(target, sdk, focus_object=None, verbose=True):
+def test(target, sdk, focus_object=None, retry_count=1, verbose=True):
   try:
     tests_dir = Config.tests_dir
   except AttributeError:
@@ -68,7 +68,10 @@ def test(target, sdk, focus_object=None, verbose=True):
     tests = focus_object.get_tests(tests)
 
   for tc in tests:
-    tc.run()
+    for i in range(retry_count):
+      tc.run()
+      if tc.result:
+        break
 
   if Config.test_report_format:
     formatter = formatter_map[Config.test_report_format]()

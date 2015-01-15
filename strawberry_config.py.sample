@@ -34,5 +34,6 @@ class Config:
   test = True
   focus = None
   exclude = None
+  retry_count = 1
   verbose = False
   debug = False

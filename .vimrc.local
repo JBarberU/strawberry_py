@@ -1,3 +1,9 @@
+let g:ctrlp_custom_ignore = {
+	\ 'dir':  '\v[\/](\.(git|hg|svn)|build|integration/doc)$',
+	\ 'file': '\v\.(exe|so|dll|example|pyc)$',
+	\ 'link': 'some_bad_symbolic_links',
+	\ }
+
 set expandtab
 set ts=2
 set shiftwidth=2

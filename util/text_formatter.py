@@ -21,7 +21,7 @@ class TextResultFormatter(ResultFormatterBase):
         if ml.prefix == "Duration":
           duration = float(ml.body)
         elif ml.prefix == "Fail" or ml.prefix == "Error":
-          err_log += "%s: %s" % (ml.prefix, ml.body)
+          err_log += "{0}: {1}".format(ml.prefix, ml.body)
 
       if tc.result:
         num_pass += 1
@@ -31,9 +31,9 @@ class TextResultFormatter(ResultFormatterBase):
         result = "Fail"
       sum_duration += duration
 
-      lines += ["%s: %s (%s\s)\n" % (result, tc.file_name, duration)]
+      lines += ["{0}: {1} ({2}s)\n".format(result, tc.file_name, duration)]
 
-    lines += ["Summary: failed: %s, passed: %s, total: %s, time: %s" % (num_fail, num_pass, (num_fail + num_pass), sum_duration)]
+    lines += ["Summary: failed: {0}, passed: {1}, total: {2}, time: {3}".format(num_fail, num_pass, (num_fail + num_pass), sum_duration)]
 
     return lines
 

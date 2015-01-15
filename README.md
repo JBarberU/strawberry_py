@@ -36,10 +36,10 @@ Works:
 * Continue other tests after one fails
 * Focus on a given set of tests
 * Exclude a given set of tests
+* Add ability to retry test
 
 In progress:
 
-* Add ability to retry test
 * Add ability to uninstall app between tests
 
 Doesn't work:
