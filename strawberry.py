@@ -21,7 +21,7 @@ except ImportError:
 
 from command import run_cmd
 from target import Target, sdks
-from build import build
+from xc_build import XCodeBuildBase
 from xc_test import test
 from xc_test import TestFocusObject
 from xc_test import TestExcludeObject
@@ -105,7 +105,10 @@ def main():
     exit(1)
 
   if Config.build:
-    build(Config.clean, target_li[0], sdk_li[0], Config.run, Config.verbose)
+    builder = XCodeBuildBase.create_builder()
+    if not builder.build(Config.clean, target_li[0], sdk_li[0], Config.run, Config.verbose):
+      Log.err("Failed to build! Aborting...")
+      exit(1)
 
   if Config.test:
     if Config.focus:
