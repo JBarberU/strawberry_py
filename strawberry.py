@@ -52,7 +52,7 @@ def main():
   parser.add_argument("--test", action="store_true", help="Run tests")
   parser.add_argument("--focus", nargs="+", help="Only run the given tests")
   parser.add_argument("--exclude", nargs="+", help="Run all but the given tests")
-  parser.add_argument("--retry-count", help="The number of times to retry a failed test")
+  parser.add_argument("--retry-count", type=int, help="The number of times to retry a failed test")
   parser.add_argument("-v", "--verbose", action="store_true", help="Prints output for all commands")
   parser.add_argument("-d", "--debug", action="store_true", help="Print debug information")
   args = parser.parse_args()
