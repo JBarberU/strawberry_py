@@ -14,7 +14,7 @@ def run_cmd_ret_output(args, formatter):
       try:
         formatter.put_line(line)
       except RuntimeError as e:
-        p.terminate
+        p.terminate()
         raise e
     else:
       break
