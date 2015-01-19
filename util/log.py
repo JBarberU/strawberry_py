@@ -1,23 +1,30 @@
+import sys
 from colors import Colors
 
 class Log:
 
   @classmethod
-  def print_msg(cls, title, msg, color):
-    print("%s%s%s: %s" % (color, title, Colors.NORMAL, msg))
+  def print_msg(cls, title, msg, color, new_line = True):
+    Log.raw("{0}{1}{2}: {3}".format(color, title, Colors.NORMAL, msg), new_line)
 
   @classmethod
-  def msg(cls, msg_in):
-    Log.print_msg("Message", msg_in, Colors.GREEN)
+  def msg(cls, msg, new_line = True):
+    Log.print_msg("Message", msg, Colors.GREEN_FG, new_line)
 
   @classmethod
-  def info(cls, msg_in):
-    Log.print_msg("Info", msg_in, Colors.BLUE)
+  def info(cls, msg, new_line = True):
+    Log.print_msg("Info", msg, Colors.MAGENTA_FG, new_line)
 
   @classmethod
-  def warn(cls, msg_in):
-    Log.print_msg("Warning", msg_in, Colors.YELLOW)
+  def warn(cls, msg, new_line = True):
+    Log.print_msg("Warning", msg, Colors.YELLOW_FG, new_line)
 
   @classmethod
-  def err(cls, msg_in):
-    Log.print_msg("Error", msg_in, Colors.RED)
+  def err(cls, msg, new_line = True):
+    Log.print_msg("Error", msg, Colors.RED_FG, new_line)
+
+  @classmethod
+  def raw(cls, msg, new_line = True):
+    if new_line and msg[-1:] != "\n":
+      msg += "\n"
+    sys.stdout.write("{0}".format(msg))

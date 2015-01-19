@@ -35,3 +35,9 @@ class OutputPipe:
       if re.compile(uo).match(line):
         raise TestFailureError(line)
 
+  def start(self):
+    pass
+
+  def stop(self):
+    pass
+

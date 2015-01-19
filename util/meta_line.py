@@ -3,13 +3,13 @@ from line import Line
 import re
 
 prefixes = [
-            ("Start", "", Colors.GREEN),
-            ("Pass", "", Colors.GREEN),
-            ("Debug", "", Colors.BLUE),
-            ("Error", "", Colors.RED),
-            ("Fail", "", Colors.RED),
-            ("Duration", "s;", Colors.BLUE),
-            ("logElementTree", "", Colors.BLUE),
+            ("Start", "", Colors.GREEN_FG),
+            ("Pass", "", Colors.GREEN_FG),
+            ("Debug", "", Colors.BLUE_FG),
+            ("Error", "", Colors.RED_FG),
+            ("Fail", "", Colors.RED_FG),
+            ("Duration", "s;", Colors.BLUE_FG),
+            ("logElementTree", "", Colors.BLUE_FG),
            ]
 
 class MetaLine(Line):

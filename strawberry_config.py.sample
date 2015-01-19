@@ -25,6 +25,8 @@ class Config:
   targets = [Target(name="foo", scheme="Foo Scheme", bundle_id="com.example.MyApp-Foo"),
              Target(name="bar", scheme="Bar Scheme", bundle_id="com.example.MyApp-Bar")]
 
+  device = None
+
   # These all correspond to the commandline arguments to strawberry_py
   clean = False
   target = None
@@ -35,5 +37,6 @@ class Config:
   focus = None
   exclude = None
   retry_count = 1
+  reinstall = False
   verbose = False
   debug = False

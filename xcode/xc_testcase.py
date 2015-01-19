@@ -4,6 +4,8 @@ from output_pipe import OutputPipe
 from command import run_cmd_ret_output
 from strawberry_config import Config
 from shutil import rmtree
+from log import Log
+from colors import Colors
 import os
 import random
 import tempfile
@@ -47,7 +49,7 @@ class TestCase:
 
   def run(self):
     self.run_number += 1
-    print("Running test: %s, %s try" % (self.file_name, number_string_with_postfix(self.run_number)))
+    Log.print_msg("Running test", "{0} ({1} try)".format(self.file_name, number_string_with_postfix(self.run_number)), Colors.CYAN_FG, True)
 
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = OutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
@@ -56,7 +58,7 @@ class TestCase:
                                      #"-v",
                                      "-D", instruments_trace_dir,
                                      "-t", "Automation",
-                                     "-w", "iPhone 5s (8.1 Simulator",
+                                     "-w", "{0}".format(Config.device),
                                      "%s/Build/Products/Release-iphonesimulator/%s.app" %
                                        (Config.build_dir, self.target.scheme),
                                      "-e", "UIASCRIPT", "%s/%s" %(Config.tests_dir, self.file_name),

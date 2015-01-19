@@ -5,6 +5,10 @@ from xc_testcase import TestCase
 from commandline_formatter import CommandlineResultFormatter
 from junit_formatter import JUnitResultFormatter
 from text_formatter import TextResultFormatter
+from command import run_cmd_ret_output
+from progress_pipe import ProgressPipe
+from output_pipe import OutputPipe
+from log import Log
 
 class TestObjectBase:
 
@@ -52,7 +56,7 @@ formatter_map = {
                   'text': TextResultFormatter,
                 }
 
-def test(target, sdk, focus_object=None, retry_count=1, verbose=True):
+def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose=True):
   try:
     tests_dir = Config.tests_dir
   except AttributeError:
@@ -67,8 +71,21 @@ def test(target, sdk, focus_object=None, retry_count=1, verbose=True):
   if focus_object:
     tests = focus_object.get_tests(tests)
 
+  if Config.debug:
+    pipe_type = OutputPipe
+  else:
+    pipe_type = ProgressPipe
+
   for tc in tests:
     for i in range(retry_count):
+      if reinstall:
+        ret_code = run_cmd_ret_output(["xcrun","simctl", "uninstall", Config.device, target.bundle_id], pipe_type())
+        if not (ret_code == 0 or ret_code == 1):
+          Log.err("Uninstall failed!")
+          ret_code = run_cmd_ret_output(["xcrun","simctl", "install", "booted", "\"{0}/Build/Products/Release-iphonesimulator/{1}.app\"".format(Config.build_dir, target.scheme)], pipe_type())
+        if not (ret_code == 0 or ret_code == 1):
+          Log.err("Install failed!")
+          exit(1)
       tc.run()
       if tc.result:
         break
