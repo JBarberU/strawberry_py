@@ -17,6 +17,7 @@ class OutputPipe:
     self.verbose = verbose
     self.pretty = pretty
     self.unacceptable_output = unacceptable_output
+    self.meta_lines = []
 
   def put_line(self, line):
     m_line = MetaLine(line)
