@@ -24,7 +24,7 @@ class TestCase:
 
   def __create_folders(self):
     if not Config.test_results_dir:
-      test_results_dir = "%s/results" % tempfile.gettempdir()#, random.getrandbits(128))
+      test_results_dir = "/tmp/results"
     else:
       test_results_dir = Config.test_results_dir
 
@@ -35,15 +35,9 @@ class TestCase:
         raise
 
     if not Config.instruments_trace_dir:
-      instruments_trace_dir = "%s/instruments" % tempfile.gettempdir()
+      instruments_trace_dir = "/tmp/instruments"
     else:
       instruments_trace_dir = Config.instruments_trace_dir
-
-    try:
-      os.makedirs(instruments_trace_dir)
-    except OSError:
-      if not os.path.isdir(instruments_trace_dir):
-        raise
 
     return (test_results_dir, instruments_trace_dir)
 
@@ -54,16 +48,32 @@ class TestCase:
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = OutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
     try:
-      ret_code = run_cmd_ret_output(["instruments",
-                                     #"-v",
-                                     "-D", instruments_trace_dir,
-                                     "-t", "Automation",
-                                     "-w", "{0}".format(Config.device),
-                                     "%s/Build/Products/Release-iphonesimulator/%s.app" %
-                                       (Config.build_dir, self.target.scheme),
-                                     "-e", "UIASCRIPT", "%s/%s" %(Config.tests_dir, self.file_name),
-                                     "-e", "UIARESULTSPATH", test_results_dir,
-                                    ], pipe)
+      app_path = "{0}/{1}/Build/Products/Release-iphonesimulator/{2}.app".format(os.getcwd(), Config.build_dir, self.target.scheme)
+      if not os.path.exists(app_path):
+        app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(Config.build_dir, self.target.scheme)
+        if not os.path.exists(app_path):
+          Log.err("The app does't seem to exist")
+          exit(1)
+      tests_dir = "{0}/{1}".format(os.getcwd(), Config.tests_dir)
+      if not os.path.exists(tests_dir):
+        tests_dir = Config.tests_dir
+        if not os.path.exists(tests_dir):
+          Log.err("The tests directory doesn't seem to exist")
+          exit(1)
+
+      inst_cmd = ["instruments",
+                  "-D", instruments_trace_dir,
+                  "-t", "Automation",
+                  "-w", Config.device,
+                  "{0}".format(app_path),
+                  "-e", "UIASCRIPT", "{0}/{1}".format(tests_dir, self.file_name),
+                  "-e", "UIARESULTSPATH", test_results_dir,
+                 ]
+
+      if Config.verbose:
+        inst_cmd = [inst_cmd[0], "-v"] + inst_cmd[1:]
+
+      ret_code = run_cmd_ret_output(inst_cmd, pipe)
     except TestFailureError:
       ret_code = 1
 
