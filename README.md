@@ -41,10 +41,9 @@ Works:
 
 In progress:
 
-* Switch config file to json
+* Running the application (without testing)
 
 Doesn't work:
 
-* Running the application (without testing)
 * Generating build reports
 
