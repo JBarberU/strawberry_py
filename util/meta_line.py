@@ -3,11 +3,13 @@ from line import Line
 import re
 
 prefixes = [
-            ("Start", "", Colors.GREEN_FG),
+            ("Start", "", Colors.MAGENTA_FG),
             ("Pass", "", Colors.GREEN_FG),
+            ("Fail", "", Colors.RED_FG),
             ("Debug", "", Colors.BLUE_FG),
             ("Error", "", Colors.RED_FG),
-            ("Fail", "", Colors.RED_FG),
+            ("Default", "", Colors.MAGENTA_FG),
+            ("Warning", "", Colors.YELLOW_FG),
             ("Duration", "s;", Colors.BLUE_FG),
             ("logElementTree", "", Colors.BLUE_FG),
            ]
@@ -19,6 +21,12 @@ class MetaLine(Line):
 
   def __init__(self, line):
     self.body = line
+    if line.find("Waiting for device to boot") != -1:
+      self.color = Colors.CYAN_FG
+      self.prefix = "Instruments"
+      self.body = "Booting device\n"
+      return
+
     for (p, end, c) in prefixes:
       match = re.compile(".*%s ?: ?" % p).match(line)
       if match:
