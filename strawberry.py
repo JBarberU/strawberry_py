@@ -119,8 +119,8 @@ def main():
     Log.warn("Using the default device: \"{0}\"".format(default_device))
 
   if Config.build:
-    builder = XCodeBuildBase.create_builder()
-    if not builder.build(Config.clean, target_li[0], sdk_li[0], Config.build_dir, Config.run, Config.verbose):
+    builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], Config.build_dir)
+    if not builder.build(Config.clean, Config.run, Config.device, Config.verbose):
       Log.fatal("Failed to build! Aborting...")
 
   if Config.test:
