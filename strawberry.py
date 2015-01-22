@@ -9,7 +9,6 @@ sys.path += [".",
              f_path,
              "%s/util" % f_path,
              "%s/xcode" % f_path]
-
 from colors import Colors
 
 try:
@@ -108,7 +107,9 @@ def main():
     exit(1)
 
   if not Config.device:
-    Config.device = get_device("iPhone 5s (8.1 Simulator)")
+    default_device = "iPhone 5s (8.1 Simulator)"
+    Config.device = get_device(default_device)
+    Log.warn("Using the default device: \"{0}\"".format(default_device))
 
   if Config.build:
     builder = XCodeBuildBase.create_builder()
