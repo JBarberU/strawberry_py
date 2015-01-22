@@ -1,6 +1,8 @@
 import subprocess
 import operator
 import sys
+from time import sleep
+from datetime import datetime
 
 from log import Log
 from colors import Colors
@@ -10,28 +12,32 @@ def run_cmd_ret_output(args, formatter):
   for a in args:
     cmd += "%s " % a
 
-  formatter.start()
+  if formatter:
+    formatter.start()
 
   p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-  while True:
-    line = p.stdout.readline()
-    if line != '':
-      try:
-        formatter.put_line(line)
-      except RuntimeError as e:
-        p.terminate()
-        raise e
-    else:
-      break
+  if formatter:
+    while True:
+      line = p.stdout.readline()
+      if line != '':
+        try:
+          formatter.put_line(line)
+        except RuntimeError as e:
+          p.terminate()
+          raise e
+      else:
+        break
   p.wait()
-  formatter.stop()
+  if formatter:
+    formatter.stop()
   return p.returncode
 
 """ commands is an array of touples with command+args and array with acceptable
 error codes. An example: [(["echo", "Hello World"], []), (["exit", "1"], [1])]"""
-def run_chained_commands(commands, formatter):
-  formatter.start()
+def run_chained_commands(commands, formatter = None):
+  if formatter:
+    formatter.start()
   proc_list = []
   for (args, err_codes) in commands:
     if 0 not in err_codes:
