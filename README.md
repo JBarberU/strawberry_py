@@ -24,25 +24,4 @@ alternative.
 * Being useful for building iOS applications, even when you don't want to do any
 testing
 
-### Current status
-
-Works:
-
-* Building iOS project
-* Running the tests
-* Generating commandline test reports
-* Generating simple junit test reports
-* Generating simple text test reports
-* Continue other tests after one fails
-* Focus on a given set of tests
-* Exclude a given set of tests
-* Add ability to retry test
-* Add ability to uninstall app between tests
-* Running the application (without testing)
-
-In progress:
-
-Doesn't work:
-
-* Generating build reports
 
