@@ -83,7 +83,7 @@ def main():
     Config.debug = True
 
   if Config.debug:
-    print("Args: " + str(args))
+    Log.info("Args: " + str(args))
 
   if args.list_targets:
     print_targets()
@@ -93,18 +93,15 @@ def main():
     exit(0)
 
   if Config.target == None:
-    print("You need to provide a target, try --list-targets to see which are available or --help to see the help")
-    exit(1)
+    Log.fatal("You need to provide a target, try --list-targets to see which are available or --help to see the help")
 
   target_li = [t for t in Config.targets if t.name == Config.target]
   if len(target_li) != 1:
-    print("Invalid target: %s" % Config.target)
-    exit(1)
+    Log.fatal("Invalid target \"{0}\"".format(Config.target))
 
   sdk_li = [s for s in sdks if s == Config.sdk]
   if len(sdk_li) != 1:
-    print("Invalid sdk: %s" % sdk_in)
-    exit(1)
+    Log.fatal("Invalid sdk \"{0}\"".format(sdk_in))
 
   if not Config.device:
     default_device = "iPhone 5s (8.1 Simulator)"
@@ -113,9 +110,8 @@ def main():
 
   if Config.build:
     builder = XCodeBuildBase.create_builder()
-    if not builder.build(Config.clean, target_li[0], sdk_li[0], Config.run, Config.verbose):
-      Log.err("Failed to build! Aborting...")
-      exit(1)
+    if not builder.build(Config.clean, target_li[0], sdk_li[0], Config.build_dir, Config.run, Config.verbose):
+      Log.fatal("Failed to build! Aborting...")
 
   if Config.test:
     if Config.focus:

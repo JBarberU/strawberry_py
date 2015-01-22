@@ -3,6 +3,8 @@ import sys
 import shutil
 import os
 
+from log import Log
+
 def get_var(msg, default):
   sys.stdout.write("%s (default is \"%s\"): " % (msg, default))
   ret = raw_input()
@@ -16,11 +18,11 @@ def setup():
     ans = raw_input()
     if ans == "y" or ans == "Y":
       shutil.copy("%s/../strawberry_config.py.sample" % os.path.dirname(__file__), "strawberry_config.py")
-      print("Created strawberry_config.py, edit it to suit your needs")
+      Log.info("Created strawberry_config.py, edit it to suit your needs")
     else:
-      print("Didn't create strawberry_config.py, you won't be able to use strawberry_py until you do")
+      Log.err("Didn't create strawberry_config.py, you won't be able to use strawberry_py until you do")
   else:
-    print("strawberry_config.py already exists, nothing to do...")
+    Log.info("strawberry_config.py already exists, nothing to do...")
 
 
 
