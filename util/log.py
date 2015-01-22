@@ -9,11 +9,11 @@ class Log:
 
   @classmethod
   def msg(cls, msg, new_line = True):
-    Log.print_msg("Message", msg, Colors.GREEN_FG, new_line)
+    Log.print_msg("Message", msg, Colors.MAGENTA_FG, new_line)
 
   @classmethod
   def info(cls, msg, new_line = True):
-    Log.print_msg("Info", msg, Colors.MAGENTA_FG, new_line)
+    Log.print_msg("Info", msg, Colors.CYAN_FG, new_line)
 
   @classmethod
   def warn(cls, msg, new_line = True):
