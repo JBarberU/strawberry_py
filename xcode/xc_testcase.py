@@ -48,7 +48,7 @@ class TestCase:
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = OutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
     try:
-      app_path = "{0}/{1}/Build/Products/Release-iphonesimulator/{2}.app".format(os.getcwd(), Config.build_dir, self.target.scheme)
+      app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(Config.build_dir, self.target.scheme)
       if not os.path.exists(app_path):
         app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(Config.build_dir, self.target.scheme)
         if not os.path.exists(app_path):

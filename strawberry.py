@@ -9,6 +9,7 @@ sys.path += [".",
              f_path,
              "%s/util" % f_path,
              "%s/xcode" % f_path]
+
 from colors import Colors
 
 try:
@@ -102,6 +103,15 @@ def main():
   sdk_li = [s for s in sdks if s == Config.sdk]
   if len(sdk_li) != 1:
     Log.fatal("Invalid sdk \"{0}\"".format(sdk_in))
+
+  if not Config.build_dir:
+    Log.fatal("Build dir not set")
+  else:
+    build_dir = "{0}/{1}".format(os.getcwd(), Config.build_dir)
+    if os.path.exists(os.path.dirname(build_dir)):
+      Config.build_dir = build_dir
+    elif not os.path.exists(os.path.dirname(Config.build_dir)):
+      Log.fatal("Build dir doesn't exist")
 
   if not Config.device:
     default_device = "iPhone 5s (8.1 Simulator)"
