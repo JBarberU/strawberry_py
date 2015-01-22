@@ -37,10 +37,11 @@ Works:
 * Focus on a given set of tests
 * Exclude a given set of tests
 * Add ability to retry test
+* Add ability to uninstall app between tests
 
 In progress:
 
-* Add ability to uninstall app between tests
+* Switch config file to json
 
 Doesn't work:
 
