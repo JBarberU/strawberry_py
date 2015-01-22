@@ -82,10 +82,6 @@ def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose
         ret_code = run_cmd_ret_output(["xcrun","simctl", "uninstall", Config.device, target.bundle_id], pipe_type())
         if not (ret_code == 0 or ret_code == 1):
           Log.err("Uninstall failed!")
-          ret_code = run_cmd_ret_output(["xcrun","simctl", "install", "booted", "\"{0}/Build/Products/Release-iphonesimulator/{1}.app\"".format(Config.build_dir, target.scheme)], pipe_type())
-        if not (ret_code == 0 or ret_code == 1):
-          Log.err("Install failed!")
-          exit(1)
       tc.run()
       if tc.result:
         break
