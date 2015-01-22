@@ -27,6 +27,7 @@ from xc_test import TestExcludeObject
 from setup import setup
 from log import Log
 from xc_utils import get_device
+from build_xml_formatter import BuildXMLFormatter
 
 def print_targets():
   print("Available targets:\n")
@@ -120,8 +121,20 @@ def main():
 
   if Config.build:
     builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], Config.build_dir)
-    if not builder.build(Config.clean, Config.run, Config.device, Config.verbose):
+    if Config.build_report_format:
+      if Config.build_report_format == "xml":
+        result_formatter = BuildXMLFormatter(Config.build_report_file)
+      else:
+        Log.warn("Unknown build_report_format \"{0}\"".format(Config.build_report_format))
+        result_formatter = None
+    else:
+      result_formatter = None
+    if not builder.build(Config.clean, Config.run, Config.device, result_formatter, Config.verbose):
+      result_formatter.save()
       Log.fatal("Failed to build! Aborting...")
+
+    if result_formatter:
+      result_formatter.save()
 
   if Config.test:
     if Config.focus:

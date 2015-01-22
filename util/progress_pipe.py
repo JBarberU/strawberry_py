@@ -8,6 +8,7 @@ import time
 class ProgressPipe(OutputPipe):
 
   def put_line(self, line):
+    OutputPipe.put_line(self, line)
     Log.raw("{0}.{1}".format(Colors.GREEN_FG, Colors.NORMAL), new_line = False)
 
   def start(self):

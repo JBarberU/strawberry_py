@@ -7,7 +7,7 @@ from junit_formatter import JUnitResultFormatter
 from text_formatter import TextResultFormatter
 from command import run_cmd_ret_output
 from progress_pipe import ProgressPipe
-from output_pipe import OutputPipe
+from pretty_pipe import PrettyPipe
 from log import Log
 
 class TestObjectBase:
@@ -72,7 +72,7 @@ def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose
     tests = focus_object.get_tests(tests)
 
   if Config.debug:
-    pipe_type = OutputPipe
+    pipe_type = PrettyPipe
   else:
     pipe_type = ProgressPipe
 

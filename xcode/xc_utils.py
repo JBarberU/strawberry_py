@@ -3,7 +3,7 @@ from command import run_cmd_ret_output
 from output_pipe import OutputPipe
 
 def get_device(device_name):
-  pipe = OutputPipe(verbose = False)
+  pipe = OutputPipe()
   ret_code = run_cmd_ret_output(["instruments", "-s", "devices"], pipe)
   for m_line in pipe.meta_lines:
     search = re.compile(re.escape(device_name)).match(m_line.body)

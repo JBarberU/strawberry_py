@@ -6,6 +6,7 @@ from time import sleep
 
 from command import run_cmd_ret_output
 from output_pipe import OutputPipe
+from pretty_pipe import PrettyPipe
 from progress_pipe import ProgressPipe
 from log import Log
 
@@ -23,7 +24,7 @@ class XCodeBuildBase:
 
   @classmethod
   def create_builder(cls, target, sdk, build_dir):
-    pipe = OutputPipe(verbose = False)
+    pipe = OutputPipe()
     run_cmd_ret_output(["xcodebuild", "-version"], pipe)
     version = re.compile("(\d\.?)+").search(pipe.meta_lines[0].body).group()
     if re.compile("6\.*").match(version):
@@ -32,12 +33,15 @@ class XCodeBuildBase:
       raise UnsupportedPlatformError("The version {0} is not supported".format(version))
 
 class XCodeBuild61(XCodeBuildBase):
-  def build(self, clean, run, device, verbose):
+  def build(self, clean, run, device, result_formatter, verbose):
     if verbose:
-      pipe_type = OutputPipe
+      pipe_type = PrettyPipe
     else:
       pipe_type = ProgressPipe
     if clean:
+      pipe = pipe_type()
+      if result_formatter:
+        result_formatter.start(pipe)
       Log.msg("Cleaning \"{0}\"".format(self.target.scheme))
       ret_code = run_cmd_ret_output(["xcodebuild",
                                      "clean",
@@ -45,17 +49,24 @@ class XCodeBuild61(XCodeBuildBase):
                                      "-derivedDataPath", self.build_dir,
                                      "-archivePath", self.build_dir,
                                      "-scheme", self.target.scheme],
-                                     pipe_type())
+                                     pipe)
+      if result_formatter:
+        result_formatter.stop(ret_code)
       if ret_code != 0:
         return False
 
+    pipe = pipe_type()
+    if result_formatter:
+      result_formatter.start(pipe)
     Log.msg("Building \"{0}\"".format(self.target.scheme))
     ret_code = run_cmd_ret_output(["xcodebuild",
                                    "-sdk", self.sdk,
                                    "-derivedDataPath", self.build_dir,
                                    "-archivePath", self.build_dir,
                                    "-scheme", self.target.scheme],
-                                   pipe_type())
+                                   pipe)
+    if result_formatter:
+      result_formatter.stop(ret_code)
 
     if ret_code == 0 and run:
       if not device:
