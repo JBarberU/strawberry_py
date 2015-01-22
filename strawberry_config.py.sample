@@ -6,6 +6,8 @@ class Config:
   tests_dir = "integration/javascript/iphone"
   build_dir = "build"
 
+  # Supported build report formats
+  # build_report_format = None
   build_report_format = "xml"
 
   # The build_report_file is ignored if build_report_format == None
