@@ -38,10 +38,9 @@ Works:
 * Exclude a given set of tests
 * Add ability to retry test
 * Add ability to uninstall app between tests
+* Running the application (without testing)
 
 In progress:
-
-* Running the application (without testing)
 
 Doesn't work:
 
