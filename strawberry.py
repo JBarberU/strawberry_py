@@ -7,6 +7,7 @@ import argparse
 f_path = os.path.dirname(__file__)
 sys.path += [".",
              f_path,
+             "%s/lib" % f_path,
              "%s/util" % f_path,
              "%s/xcode" % f_path]
 
