@@ -14,12 +14,8 @@ class BuildXMLFormatter(BuildFormatterBase):
     BuildFormatterBase.stop(self, return_code)
 
     lines = []
-    for l in self.pipe.meta_lines:
-      if l.prefix:
-        line = "{0}: {1}".format(l.prefix,l.body)
-      else:
-        line = l.body
-      lines.append(line)
+    for l in self.pipe.stdout:
+      lines.append(l)
 
     self.builds.append((lines, return_code))
 

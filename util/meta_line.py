@@ -1,5 +1,4 @@
 from colors import Colors
-from line import Line
 import re
 
 prefixes = [
@@ -14,7 +13,7 @@ prefixes = [
             ("logElementTree", "", Colors.BLUE_FG),
            ]
 
-class MetaLine(Line):
+class MetaLine:
   color = Colors.NORMAL
   prefix = ""
   body = ""

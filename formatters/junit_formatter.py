@@ -1,5 +1,5 @@
 from xc_testcase import TestCase
-from result_formatter import ResultFormatterBase
+from result_formatter_base import ResultFormatterBase
 from meta_line import MetaLine
 
 class JUnitResultFormatter(ResultFormatterBase):

@@ -1,7 +1,7 @@
 from number_helper import number_string_with_postfix
-from xc_exception import TestFailureError
-from pretty_pipe import PrettyPipe
-from command import run_cmd_ret_output
+from output_error import OutputError
+from pretty_output_pipe import PrettyOutputPipe
+from commander import Commander
 from strawberry_config import Config
 from shutil import rmtree
 from log import Log
@@ -46,7 +46,7 @@ class TestCase:
     Log.print_msg("Running test", "{0} ({1} try)".format(self.file_name, number_string_with_postfix(self.run_number)), Colors.CYAN_FG, True)
 
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
-    pipe = PrettyPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
+    pipe = PrettyOutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
     try:
       app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(Config.build_dir, self.target.scheme)
       if not os.path.exists(app_path):
@@ -73,8 +73,9 @@ class TestCase:
       if Config.verbose:
         inst_cmd = [inst_cmd[0], "-v"] + inst_cmd[1:]
 
-      ret_code = run_cmd_ret_output(inst_cmd, pipe)
-    except TestFailureError:
+      commander = Commander(pipe)
+      ret_code = commander.run_command(inst_cmd)
+    except OutputError:
       ret_code = 1
 
     self.result = ret_code == 0

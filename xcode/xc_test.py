@@ -5,9 +5,9 @@ from xc_testcase import TestCase
 from commandline_formatter import CommandlineResultFormatter
 from junit_formatter import JUnitResultFormatter
 from text_formatter import TextResultFormatter
-from command import run_cmd_ret_output
-from progress_pipe import ProgressPipe
-from pretty_pipe import PrettyPipe
+from commander import Commander
+from progress_output_pipe import ProgressOutputPipe
+from pretty_output_pipe import PrettyOutputPipe
 from log import Log
 
 class TestObjectBase:
@@ -72,14 +72,15 @@ def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose
     tests = focus_object.get_tests(tests)
 
   if Config.debug:
-    pipe_type = PrettyPipe
+    pipe_type = PrettyOutputPipe
   else:
-    pipe_type = ProgressPipe
+    pipe_type = ProgressOutputPipe
 
   for tc in tests:
     for i in range(retry_count):
       if reinstall:
-        ret_code = run_cmd_ret_output(["xcrun","simctl", "uninstall", Config.device, target.bundle_id], pipe_type())
+        commander = Commander(pipe_type())
+        ret_code = commander.run_command(["xcrun","simctl", "uninstall", Config.device, target.bundle_id])
         if not (ret_code == 0 or ret_code == 1):
           Log.err("Uninstall failed!")
       tc.run()

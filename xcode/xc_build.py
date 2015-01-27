@@ -4,10 +4,10 @@ from datetime import datetime
 from calendar import timegm
 from time import sleep
 
-from command import run_cmd_ret_output
-from output_pipe import OutputPipe
-from pretty_pipe import PrettyPipe
-from progress_pipe import ProgressPipe
+from commander import Commander
+from command_output_pipe_base import CommandOutputPipeBase
+from pretty_output_pipe import PrettyOutputPipe
+from progress_output_pipe import ProgressOutputPipe
 from log import Log
 
 class XCodeBuildBase:
@@ -24,9 +24,10 @@ class XCodeBuildBase:
 
   @classmethod
   def create_builder(cls, target, sdk, build_dir):
-    pipe = OutputPipe()
-    run_cmd_ret_output(["xcodebuild", "-version"], pipe)
-    version = re.compile("(\d\.?)+").search(pipe.meta_lines[0].body).group()
+    pipe = CommandOutputPipeBase(False)
+    commander = Commander(pipe)
+    commander.run_command(["xcodebuild", "-version"])
+    version = re.compile("(\d\.?)+").search(pipe.stdout[0]).group()
     if re.compile("6\.*").match(version):
       return XCodeBuild61(target, sdk, build_dir)
     else:
@@ -37,19 +38,19 @@ class XCodeBuild61(XCodeBuildBase):
     if verbose:
       pipe_type = PrettyPipe
     else:
-      pipe_type = ProgressPipe
+      pipe_type = ProgressOutputPipe
     if clean:
       pipe = pipe_type()
       if result_formatter:
         result_formatter.start(pipe)
       Log.msg("Cleaning \"{0}\"".format(self.target.scheme))
-      ret_code = run_cmd_ret_output(["xcodebuild",
+      commander = Commander(pipe)
+      ret_code = commander.run_command(["xcodebuild",
                                      "clean",
                                      "-sdk", self.sdk,
                                      "-derivedDataPath", self.build_dir,
                                      "-archivePath", self.build_dir,
-                                     "-scheme", self.target.scheme],
-                                     pipe)
+                                     "-scheme", self.target.scheme])
       if result_formatter:
         result_formatter.stop(ret_code)
       if ret_code != 0:
@@ -59,12 +60,12 @@ class XCodeBuild61(XCodeBuildBase):
     if result_formatter:
       result_formatter.start(pipe)
     Log.msg("Building \"{0}\"".format(self.target.scheme))
-    ret_code = run_cmd_ret_output(["xcodebuild",
+    commander = Commander(pipe)
+    ret_code = commander.run_command(["xcodebuild",
                                    "-sdk", self.sdk,
                                    "-derivedDataPath", self.build_dir,
                                    "-archivePath", self.build_dir,
-                                   "-scheme", self.target.scheme],
-                                   pipe)
+                                   "-scheme", self.target.scheme])
     if result_formatter:
       result_formatter.stop(ret_code)
 

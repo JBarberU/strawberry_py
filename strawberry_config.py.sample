@@ -1,6 +1,6 @@
 # vim: set syntax=python
 
-from target import Target
+from xc_target import Target
 
 class Config:
   tests_dir = "integration/javascript/iphone"

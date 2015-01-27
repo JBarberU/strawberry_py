@@ -9,7 +9,8 @@ sys.path += [".",
              f_path,
              "%s/lib" % f_path,
              "%s/util" % f_path,
-             "%s/xcode" % f_path]
+             "%s/xcode" % f_path,
+             "%s/formatters" % f_path]
 
 from colors import Colors
 
@@ -20,7 +21,7 @@ except ImportError:
     setup()
     exit(0)
 
-from target import Target, sdks
+from xc_target import Target, sdks
 from xc_build import XCodeBuildBase
 from xc_test import test
 from xc_test import TestFocusObject
