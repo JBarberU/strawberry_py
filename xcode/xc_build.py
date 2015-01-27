@@ -9,6 +9,7 @@ from command_output_pipe_base import CommandOutputPipeBase
 from pretty_output_pipe import PrettyOutputPipe
 from progress_output_pipe import ProgressOutputPipe
 from log import Log
+from xc_utils import get_app_path
 
 class XCodeBuildBase:
 
@@ -75,7 +76,7 @@ class XCodeBuild61(XCodeBuildBase):
 
       ret_code = run_cmd_ret_output(["open", "-a" "/Applications/Xcode.app/Contents/Applications/iOS Simulator.app"], pipe_type())
       if ret_code == 0:
-        app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(self.build_dir, self.target.scheme)
+        app_path = get_app_path(self.build_dir, self.target.scheme)
         device_booted = False
         time_spent_booting = 0
         while not device_booted and self.sim_boot_timeout > time_spent_booting:

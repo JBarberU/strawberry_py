@@ -1,3 +1,7 @@
+import os
+import random
+import tempfile
+
 from number_helper import number_string_with_postfix
 from output_error import OutputError
 from pretty_output_pipe import PrettyOutputPipe
@@ -6,9 +10,7 @@ from strawberry_config import Config
 from shutil import rmtree
 from log import Log
 from colors import Colors
-import os
-import random
-import tempfile
+from xc_utils import get_app_path
 
 class TestCase:
   result = False
@@ -48,12 +50,10 @@ class TestCase:
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = PrettyOutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
     try:
-      app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(Config.build_dir, self.target.scheme)
+      app_path = get_app_path(Config.build_dir, self.target.scheme)
       if not os.path.exists(app_path):
-        app_path = "{0}/Build/Products/Release-iphonesimulator/{1}.app".format(Config.build_dir, self.target.scheme)
-        if not os.path.exists(app_path):
-          Log.err("The app does't seem to exist")
-          exit(1)
+        Log.err("The app does't seem to exist")
+        exit(1)
       tests_dir = "{0}/{1}".format(os.getcwd(), Config.tests_dir)
       if not os.path.exists(tests_dir):
         tests_dir = Config.tests_dir
