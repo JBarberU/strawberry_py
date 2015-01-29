@@ -51,7 +51,9 @@ class XCodeBuild61(XCodeBuildBase):
                                      "-sdk", self.sdk,
                                      "-derivedDataPath", self.build_dir,
                                      "-archivePath", self.build_dir,
-                                     "-scheme", self.target.scheme])
+                                     "-configuration", self.target.configuration,
+                                     "-scheme", self.target.scheme,
+                                     ])
       if result_formatter:
         result_formatter.stop(ret_code)
       if ret_code != 0:
@@ -66,6 +68,7 @@ class XCodeBuild61(XCodeBuildBase):
                                    "-sdk", self.sdk,
                                    "-derivedDataPath", self.build_dir,
                                    "-archivePath", self.build_dir,
+                                   "-configuration", self.target.configuration,
                                    "-scheme", self.target.scheme])
     if result_formatter:
       result_formatter.stop(ret_code)
@@ -76,7 +79,7 @@ class XCodeBuild61(XCodeBuildBase):
 
       ret_code = run_cmd_ret_output(["open", "-a" "/Applications/Xcode.app/Contents/Applications/iOS Simulator.app"], pipe_type())
       if ret_code == 0:
-        app_path = get_app_path(self.build_dir, self.target.scheme)
+        app_path = get_app_path(self.build_dir, self.target.configuration, self.target.scheme)
         device_booted = False
         time_spent_booting = 0
         while not device_booted and self.sim_boot_timeout > time_spent_booting:

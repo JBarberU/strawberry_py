@@ -15,14 +15,14 @@ def get_device(device_name):
 
   return ""
 
-def get_app_path(build_dir, scheme):
+def get_app_path(build_dir, configuration, scheme):
   __paths = [
-              "{0}/Build/Products/Release-iphonesimulator/{1}.app",
-              "{0}/Products/Release-iphonesimulator/{1}.app",
+              "{0}/Build/Products/{1}-iphonesimulator/{2}.app",
+              "{0}/Products/{1}-iphonesimulator/{2}.app",
             ]
 
   for p in __paths:
-    app_path = p.format(build_dir, scheme)
+    app_path = p.format(build_dir, configuration, scheme)
     if path.exists(app_path):
       return app_path
 

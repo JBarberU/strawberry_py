@@ -4,9 +4,10 @@ sdks = [
        ]
 
 class Target:
-  def __init__(self, name, scheme, bundle_id):
+  def __init__(self, name, scheme, configuration, bundle_id):
     self.name = name
     self.scheme = scheme
+    self.configuration = configuration
     self.bundle_id = bundle_id
 
   def __str__(self):

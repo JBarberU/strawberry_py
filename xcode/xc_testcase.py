@@ -50,7 +50,7 @@ class TestCase:
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = PrettyOutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
     try:
-      app_path = get_app_path(Config.build_dir, self.target.scheme)
+      app_path = get_app_path(Config.build_dir, self.target.configuration, self.target.scheme)
       if not os.path.exists(app_path):
         Log.err("The app does't seem to exist")
         exit(1)

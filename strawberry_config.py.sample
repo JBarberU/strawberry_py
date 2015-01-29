@@ -29,8 +29,8 @@ class Config:
   # instruments_trace_dir = None
   instruments_trace_dir = "instruments"
 
-  targets = [Target(name="foo", scheme="Foo Scheme", bundle_id="com.example.MyApp-Foo"),
-             Target(name="bar", scheme="Bar Scheme", bundle_id="com.example.MyApp-Bar")]
+  targets = [Target(name="foo", scheme="Foo Scheme", configuration="Debug", bundle_id="com.example.MyApp-Foo"),
+             Target(name="bar", scheme="Bar Scheme", configuration="Release", bundle_id="com.example.MyApp-Bar")]
 
   device = None
 
