@@ -2,6 +2,7 @@ from os import listdir
 from operator import contains
 from strawberry_config import Config
 from xc_testcase import TestCase
+from xc_utils import get_app_path
 from commandline_formatter import CommandlineResultFormatter
 from junit_formatter import JUnitResultFormatter
 from text_formatter import TextResultFormatter
@@ -79,10 +80,21 @@ def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose
   for tc in tests:
     for i in range(retry_count):
       if reinstall:
-        commander = Commander(pipe_type())
+        commander = Commander(pipe_type(), debug)
+        explicit_boot = commander.run_command(["xcrun","simctl", "boot", Config.device])
+
         ret_code = commander.run_command(["xcrun","simctl", "uninstall", Config.device, target.bundle_id])
         if not (ret_code == 0 or ret_code == 1):
           Log.err("Uninstall failed!")
+        ret_code = commander.run_command(["xcrun","simctl", "install", Config.device, get_app_path(Config.build_dir, target.configuration, target.scheme)])
+        if not (ret_code == 0 or ret_code == 1):
+          Log.fatal("Install failed! error code: {}".format(ret_code))
+
+        if explicit_boot == 0:
+          # explicit_boot != 0 implies that the device was booted by instuments
+          # and should be kept alive
+          ret_code = commander.run_command(["xcrun","simctl", "shutdown", Config.device])
+
       tc.run()
       if tc.result:
         break
