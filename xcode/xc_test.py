@@ -56,7 +56,7 @@ formatter_map = {
                   'text': TextResultFormatter,
                 }
 
-def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose=True):
+def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose=True, debug=False):
   try:
     tests_dir = Config.tests_dir
   except AttributeError:
@@ -66,7 +66,7 @@ def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose
   test_files = listdir(tests_dir)
   tests = []
   for tf in test_files:
-    tests.append(TestCase(tf, target))
+    tests.append(TestCase(tf, target, debug))
 
   if focus_object:
     tests = focus_object.get_tests(tests)

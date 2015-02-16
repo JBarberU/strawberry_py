@@ -3,9 +3,9 @@ from os import path
 from commander import Commander
 from command_output_pipe_base import CommandOutputPipeBase
 
-def get_device(device_name):
+def get_device(device_name, debug=False):
   pipe = CommandOutputPipeBase(False)
-  commander = Commander(pipe)
+  commander = Commander(pipe, debug)
   ret_code = commander.run_command(["instruments", "-s", "devices"])
   for line in pipe.stdout:
     search = re.compile(re.escape(device_name)).match(line)

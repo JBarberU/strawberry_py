@@ -146,7 +146,7 @@ def main():
     else:
       focus_object = None
 
-    test(target_li[0], sdk_li[0], focus_object, Config.retry_count, Config.reinstall, verbose=Config.verbose)
+    test(target_li[0], sdk_li[0], focus_object, Config.retry_count, Config.reinstall, verbose=Config.verbose, debug=Config.debug)
 
   Log.msg("Done!")
 

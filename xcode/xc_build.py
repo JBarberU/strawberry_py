@@ -15,22 +15,23 @@ class XCodeBuildBase:
 
   sim_boot_timeout = 10
 
-  def __init__(self, target, sdk, build_dir):
+  def __init__(self, target, sdk, build_dir, debug):
     self.target = target
     self.sdk = sdk
     self.build_dir = build_dir
+    self.debug = debug
 
-  def build(self, clean, run, device, verbose):
+  def build(self, clean, run, device, result_formatter, verbose):
     raise Exception("Unimplemented function")
 
   @classmethod
-  def create_builder(cls, target, sdk, build_dir):
+  def create_builder(cls, target, sdk, build_dir, debug):
     pipe = CommandOutputPipeBase(False)
-    commander = Commander(pipe)
+    commander = Commander(pipe, debug)
     commander.run_command(["xcodebuild", "-version"])
     version = re.compile("(\d\.?)+").search(pipe.stdout[0]).group()
     if re.compile("6\.*").match(version):
-      return XCodeBuild61(target, sdk, build_dir)
+      return XCodeBuild61(target, sdk, build_dir, debug)
     else:
       raise UnsupportedPlatformError("The version {0} is not supported".format(version))
 
@@ -45,7 +46,7 @@ class XCodeBuild61(XCodeBuildBase):
       if result_formatter:
         result_formatter.start(pipe)
       Log.msg("Cleaning \"{0}\"".format(self.target.scheme))
-      commander = Commander(pipe)
+      commander = Commander(pipe, self.debug)
       ret_code = commander.run_command(["xcodebuild",
                                      "clean",
                                      "-sdk", self.sdk,

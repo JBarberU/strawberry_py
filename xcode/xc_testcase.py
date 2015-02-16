@@ -20,9 +20,10 @@ class TestCase:
   output = []
   run_number = 0
 
-  def __init__(self, file_name_in, target):
+  def __init__(self, file_name_in, target, debug):
     self.file_name = file_name_in
     self.target = target
+    self.debug = debug
 
   def __create_folders(self):
     if not Config.test_results_dir:
@@ -73,7 +74,7 @@ class TestCase:
       if Config.verbose:
         inst_cmd = [inst_cmd[0], "-v"] + inst_cmd[1:]
 
-      commander = Commander(pipe)
+      commander = Commander(pipe, self.debug)
       ret_code = commander.run_command(inst_cmd)
     except OutputError:
       ret_code = 1
