@@ -131,7 +131,7 @@ def main():
         result_formatter = None
     else:
       result_formatter = None
-    if not builder.build(Config.clean, Config.run, Config.device, result_formatter, Config.verbose):
+    if not builder.build(Config.clean, Config.run, Config.device, result_formatter):
       result_formatter.save()
       Log.fatal("Failed to build! Aborting...")
 

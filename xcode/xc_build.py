@@ -15,18 +15,19 @@ class XCodeBuildBase:
 
   sim_boot_timeout = 10
 
-  def __init__(self, target, sdk, build_dir, debug):
+  def __init__(self, target, sdk, build_dir, debug, verbose):
     self.target = target
     self.sdk = sdk
     self.build_dir = build_dir
     self.debug = debug
+    self.verbose = verbose
 
   def build(self, clean, run, device, result_formatter, verbose):
     raise Exception("Unimplemented function")
 
   @classmethod
   def create_builder(class_, target, sdk, build_dir, debug = False, verbose = False):
-    pipe = CommandOutputPipeBase(verbose)
+    pipe = CommandOutputPipeBase(False) # We don't ever want verbose version check 
     commander = Commander(pipe, debug)
     commander.run_command(["xcodebuild", "-version"])
     version = re.compile("(\d\.?)+").search(pipe.stdout[0]).group()
@@ -36,8 +37,8 @@ class XCodeBuildBase:
       raise UnsupportedPlatformError("The version {0} is not supported".format(version))
 
 class XCodeBuild61(XCodeBuildBase):
-  def build(self, clean, run, device, result_formatter, verbose):
-    if verbose:
+  def build(self, clean, run, device, result_formatter):
+    if self.verbose:
       pipe_type = PrettyPipe
     else:
       pipe_type = ProgressOutputPipe
