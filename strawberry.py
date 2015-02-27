@@ -122,7 +122,7 @@ def main():
     Log.warn("Using the default device: \"{0}\"".format(default_device))
 
   if Config.build:
-    builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], Config.build_dir)
+    builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], Config.build_dir, Config.debug, Config.verbose)
     if Config.build_report_format:
       if Config.build_report_format == "xml":
         result_formatter = BuildXMLFormatter(Config.build_report_file)

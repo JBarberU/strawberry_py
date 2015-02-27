@@ -25,13 +25,13 @@ class XCodeBuildBase:
     raise Exception("Unimplemented function")
 
   @classmethod
-  def create_builder(cls, target, sdk, build_dir, debug):
-    pipe = CommandOutputPipeBase(False)
+  def create_builder(class_, target, sdk, build_dir, debug = False, verbose = False):
+    pipe = CommandOutputPipeBase(verbose)
     commander = Commander(pipe, debug)
     commander.run_command(["xcodebuild", "-version"])
     version = re.compile("(\d\.?)+").search(pipe.stdout[0]).group()
     if re.compile("6\.*").match(version):
-      return XCodeBuild61(target, sdk, build_dir, debug)
+      return XCodeBuild61(target, sdk, build_dir, debug, verbose)
     else:
       raise UnsupportedPlatformError("The version {0} is not supported".format(version))
 
