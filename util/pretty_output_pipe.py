@@ -6,8 +6,8 @@ from meta_line import MetaLine
 
 class PrettyOutputPipe(CommandOutputPipeBase):
 
-  def __init__(self, pretty = True, unacceptable_output=[]):
-    CommandOutputPipeBase.__init__(self, False, unacceptable_output)
+  def __init__(self, verbose = False, unacceptable_output=[]):
+    CommandOutputPipeBase.__init__(self, verbose, unacceptable_output)
     self.meta_lines = []
 
   def put_line(self, line):

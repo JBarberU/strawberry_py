@@ -28,7 +28,7 @@ class XCodeBuildBase:
   @classmethod
   def create_builder(class_, target, sdk, build_dir, debug = False, verbose = False):
     pipe = CommandOutputPipeBase(False) # We don't ever want verbose version check 
-    commander = Commander(pipe, debug)
+    commander = Commander(pipe, False)
     commander.run_command(["xcodebuild", "-version"])
     version = re.compile("(\d\.?)+").search(pipe.stdout[0]).group()
     if re.compile("6\.*").match(version):
@@ -39,7 +39,7 @@ class XCodeBuildBase:
 class XCodeBuild61(XCodeBuildBase):
   def build(self, clean, run, device, result_formatter):
     if self.verbose:
-      pipe_type = PrettyPipe
+      pipe_type = PrettyOutputPipe
     else:
       pipe_type = ProgressOutputPipe
     if clean:
@@ -61,7 +61,7 @@ class XCodeBuild61(XCodeBuildBase):
       if ret_code != 0:
         return False
 
-    pipe = pipe_type()
+    pipe = pipe_type(self.verbose, [])
     if result_formatter:
       result_formatter.start(pipe)
     Log.msg("Building \"{0}\"".format(self.target.scheme))
