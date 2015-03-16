@@ -1,0 +1,47 @@
+{
+  "tests_dir": "integration/javascript/iphone",
+  "build_dir": "build",
+  "build_report_format": "xml",
+  "build_report_file": "build-report.xml",
+  "test_report_format": "junit",
+  "test_report_file": "test-report.xml",
+  "test_results_dir": "test_results",
+  "instruments_trace_dir": "instruments",
+  "device": null,
+  "clean": false,
+  "target": null,
+  "sdk": "iphoneos8.1",
+  "run": false,
+  "build": true,
+  "test": true,
+  "focus": null,
+  "exclude": null,
+  "retry_count": 1,
+  "reinstall": false,
+  "verbose": false,
+  "debug": false,
+
+  "targets": [
+    {
+      "name": "foo",
+      "scheme": "Foo Scheme",
+      "app_name": "Foo.app",
+      "configuration": "Debug",
+      "bundle_id": "com.example.MyApp-Foo"
+    },
+    {
+      "name": "bar",
+      "scheme": "Bar Scheme",
+      "app_name":  "Bar.app",
+      "configuration": "Release",
+      "bundle_id": "com.example.MyApp-Bar"
+    },
+    {
+      "name": "bar_debug",
+      "scheme": "Bar Scheme",
+      "app_name":  "Bar.app",
+      "configuration": "Debug",
+      "bundle_id": "com.example.MyApp-Bar"
+    }
+  ]
+}

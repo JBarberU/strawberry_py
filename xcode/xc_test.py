@@ -57,9 +57,16 @@ formatter_map = {
                   'text': TextResultFormatter,
                 }
 
-def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose=True, debug=False):
+def test(config):
+  if config.focus:
+    focus_object = TestFocusObject(config.focus)
+  elif config.exclude:
+    focus_object = TestExcludeObject(config.exclude)
+  else:
+    focus_object = None
+
   try:
-    tests_dir = Config.tests_dir
+    tests_dir = config.tests_dir
   except AttributeError:
     tests_dir =  "integration/javascript/iphone"
     Log.warn("tests_dir not set, defaulting to: %s" % tests_dir)
@@ -67,45 +74,45 @@ def test(target, sdk, focus_object=None, retry_count=1, reinstall=False, verbose
   test_files = listdir(tests_dir)
   tests = []
   for tf in test_files:
-    tests.append(TestCase(tf, target, debug))
+    tests.append(TestCase(tf, config))
 
   if focus_object:
     tests = focus_object.get_tests(tests)
 
-  if Config.debug:
+  if config.debug:
     pipe_type = PrettyOutputPipe
   else:
     pipe_type = ProgressOutputPipe
 
   for tc in tests:
-    for i in range(retry_count):
-      if reinstall:
+    for i in range(config.retry_count):
+      if config.reinstall:
         commander = Commander(pipe_type(), debug)
-        explicit_boot = commander.run_command(["xcrun","simctl", "boot", Config.device])
+        explicit_boot = commander.run_command(["xcrun","simctl", "boot", config.device])
 
-        ret_code = commander.run_command(["xcrun","simctl", "uninstall", Config.device, target.bundle_id])
+        ret_code = commander.run_command(["xcrun","simctl", "uninstall", config.device, target.bundle_id])
         if not (ret_code == 0 or ret_code == 1):
           Log.err("Uninstall failed!")
-        ret_code = commander.run_command(["xcrun","simctl", "install", Config.device, get_app_path(Config.build_dir, target.configuration, target.scheme)])
+        ret_code = commander.run_command(["xcrun","simctl", "install", config.device, get_app_path(config)])
         if not (ret_code == 0 or ret_code == 1):
           Log.fatal("Install failed! error code: {}".format(ret_code))
 
         if explicit_boot == 0:
           # explicit_boot != 0 implies that the device was booted by instuments
           # and should be kept alive
-          ret_code = commander.run_command(["xcrun","simctl", "shutdown", Config.device])
+          ret_code = commander.run_command(["xcrun","simctl", "shutdown", config.device])
 
       tc.run()
       if tc.result:
         break
 
-  if Config.test_report_format:
-    formatter = formatter_map[Config.test_report_format]()
+  if config.test_report_format:
+    formatter = formatter_map[config.test_report_format]()
     lines = formatter.format_result(tests)
-    if Config.test_report_file[-len(formatter.file_extension):] != formatter.file_extension:
-      file_name = "%s.%s" % (Config.test_report_file, formatter.file_extension)
+    if config.test_report_file[-len(formatter.file_extension):] != formatter.file_extension:
+      file_name = "%s.%s" % (config.test_report_file, formatter.file_extension)
     else:
-      file_name = Config.test_report_file
+      file_name = config.test_report_file
 
     with open(file_name, "w") as f:
       f.writelines(lines)

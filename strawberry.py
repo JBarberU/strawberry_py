@@ -14,13 +14,7 @@ sys.path += [".",
 
 from colors import Colors
 
-try:
-  from strawberry_config import Config
-except ImportError:
-    from setup import setup
-    setup()
-    exit(0)
-
+from xc_config import Config
 from xc_target import Target, sdks
 from xc_build import XCodeBuildBase
 from xc_test import test
@@ -31,9 +25,9 @@ from log import Log
 from xc_utils import get_device
 from build_xml_formatter import BuildXMLFormatter
 
-def print_targets():
+def print_targets(config):
   print("Available targets:\n")
-  for t in Config.targets:
+  for t in config.targets:
     print("\t%s" % t.name)
   print("")
 
@@ -44,11 +38,14 @@ def print_sdks():
   print("")
 
 def main():
+
+  config = Config("straw_conf.json")
+
   parser = argparse.ArgumentParser()
   parser.add_argument("-c", "--clean", action="store_true", help="Clean befroe build")
   parser.add_argument("-t", "--target", help="The target")
   parser.add_argument("--list-targets", action="store_true", help="Prints the available targets")
-  parser.add_argument("-s", "--sdk", default=sdks[0], help="The SDK")
+  parser.add_argument("-s", "--sdk", help="The SDK")
   parser.add_argument("--list-sdks", action="store_true", help="Lists the available SDKs")
   parser.add_argument("-r", "--run", action="store_true", help="Run after build")
   parser.add_argument("-b", "--build", action="store_true", help="Build")
@@ -62,91 +59,85 @@ def main():
   args = parser.parse_args()
 
   if args.clean:
-    Config.clean = True
+    config.clean = True
   if args.target:
-    Config.target = args.target
+    config.target = args.target
   if args.sdk:
-    Config.sdk = args.sdk
+    config.sdk = args.sdk
   if args.run:
-    Config.run = True
+    config.run = True
   if args.build:
-    Config.build = True
+    config.build = True
   if args.test:
-    Config.test = True
+    config.test = True
   if args.focus:
-    Config.focus = args.focus
+    config.focus = args.focus
   if args.exclude:
-    Config.exclude = args.exclude
+    config.exclude = args.exclude
   if args.retry_count:
-    Config.retry_count = args.retry_count
+    config.retry_count = args.retry_count
   if args.reinstall:
-    Config.reinstall = True
+    config.reinstall = True
   if args.verbose:
-    Config.verbose = True
+    config.verbose = True
   if args.debug:
-    Config.debug = True
+    config.debug = True
 
-  if Config.debug:
+  if config.debug:
     Log.info("Args: " + str(args))
 
   if args.list_targets:
-    print_targets()
+    print_targets(config)
     exit(0)
   elif args.list_sdks:
     print_sdks()
     exit(0)
 
-  if Config.target == None:
+  if config.target == None:
     Log.fatal("You need to provide a target, try --list-targets to see which are available or --help to see the help")
 
-  target_li = [t for t in Config.targets if t.name == Config.target]
+  target_li = [t for t in config.targets if t.name == config.target]
   if len(target_li) != 1:
-    Log.fatal("Invalid target \"{0}\"".format(Config.target))
+    Log.fatal("Invalid target \"{0}\"".format(config.target))
+  config.sel_target = target_li[0]
 
-  sdk_li = [s for s in sdks if s == Config.sdk]
+  sdk_li = [s for s in sdks if s == config.sdk]
   if len(sdk_li) != 1:
     Log.fatal("Invalid sdk \"{0}\"".format(sdk_in))
 
-  if not Config.build_dir:
+  if not config.build_dir:
     Log.fatal("Build dir not set")
   else:
-    build_dir = "{0}/{1}".format(os.getcwd(), Config.build_dir)
+    build_dir = "{0}/{1}".format(os.getcwd(), config.build_dir)
     if os.path.exists(os.path.dirname(build_dir)):
-      Config.build_dir = build_dir
-    elif not os.path.exists(os.path.dirname(Config.build_dir)):
+      config.build_dir = build_dir
+    elif not os.path.exists(os.path.dirname(config.build_dir)):
       Log.fatal("Build dir doesn't exist")
 
-  if not Config.device:
+  if not config.device:
     default_device = "iPhone 5s (8.1 Simulator)"
-    Config.device = get_device(default_device)
+    config.device = get_device(default_device)
     Log.warn("Using the default device: \"{0}\"".format(default_device))
 
-  if Config.build:
-    builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], Config.build_dir, Config.debug, Config.verbose)
-    if Config.build_report_format:
-      if Config.build_report_format == "xml":
-        result_formatter = BuildXMLFormatter(Config.build_report_file)
+  if config.build:
+    builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], config.build_dir, config.debug, config.verbose)
+    if config.build_report_format:
+      if config.build_report_format == "xml":
+        result_formatter = BuildXMLFormatter(config.build_report_file)
       else:
-        Log.warn("Unknown build_report_format \"{0}\"".format(Config.build_report_format))
+        Log.warn("Unknown build_report_format \"{0}\"".format(config.build_report_format))
         result_formatter = None
     else:
       result_formatter = None
-    if not builder.build(Config.clean, Config.run, Config.device, result_formatter):
+    if not builder.build(config.clean, config.run, config.device, result_formatter):
       result_formatter.save()
       Log.fatal("Failed to build! Aborting...")
 
     if result_formatter:
       result_formatter.save()
 
-  if Config.test:
-    if Config.focus:
-      focus_object = TestFocusObject(Config.focus)
-    elif Config.exclude:
-      focus_object = TestExcludeObject(Config.exclude)
-    else:
-      focus_object = None
-
-    test(target_li[0], sdk_li[0], focus_object, Config.retry_count, Config.reinstall, verbose=Config.verbose, debug=Config.debug)
+  if config.test:
+    test(config)
 
   Log.msg("Done!")
 

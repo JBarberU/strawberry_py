@@ -21,6 +21,8 @@ class XCodeBuildBase:
     self.build_dir = build_dir
     self.debug = debug
     self.verbose = verbose
+    if self.debug:
+      Log.info("Creating debug builder")
 
   def build(self, clean, run, device, result_formatter, verbose):
     raise Exception("Unimplemented function")
@@ -65,7 +67,7 @@ class XCodeBuild61(XCodeBuildBase):
     if result_formatter:
       result_formatter.start(pipe)
     Log.msg("Building \"{0}\"".format(self.target.scheme))
-    commander = Commander(pipe)
+    commander = Commander(pipe, self.debug)
     ret_code = commander.run_command(["xcodebuild",
                                    "-sdk", self.sdk,
                                    "-derivedDataPath", self.build_dir,
