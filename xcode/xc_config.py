@@ -42,7 +42,9 @@ class Config:
       "verbose": self.verbose,
       "debug": self.debug,
       "foo": self.foo,
-      "targets": Target.serialize(self.targets)
+      "targets": Target.serialize(self.targets),
+      "codesigning_identity": self.codesign_identity,
+      "provisioning_profile": self.provisioning_profile,
     }
 
     return json_object
@@ -71,6 +73,8 @@ class Config:
     self.init_mem(json_object, "verbose",               False)
     self.init_mem(json_object, "debug",                 False)
     self.init_mem(json_object, "foo",                   "bar")
+    self.init_mem(json_object, "codesigning_identity",  "")
+    self.init_mem(json_object,  "provisioning_profile",  "")
 
     try:
       self.targets = Target.deserialize(json_object["targets"])

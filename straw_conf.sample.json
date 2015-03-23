@@ -20,6 +20,8 @@
   "reinstall": false,
   "verbose": false,
   "debug": false,
+  "codesigning_identity": "iPhone Devolopment: Build Certificate",
+  "provisioning_profile": "",
 
   "targets": [
     {

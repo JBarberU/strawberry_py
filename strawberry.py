@@ -95,11 +95,11 @@ def main():
 
   if config.target == None:
     Log.fatal("You need to provide a target, try --list-targets to see which are available or --help to see the help")
-
-  target_li = [t for t in config.targets if t.name == config.target]
-  if len(target_li) != 1:
-    Log.fatal("Invalid target \"{0}\"".format(config.target))
-  config.sel_target = target_li[0]
+  else:
+    t_li = [x for x in config.targets if x.name == config.target]
+    if len(t_li) > 1:
+      Log.fatal("You can't use a non-unique target name")
+    config.sel_target = t_li[0]
 
   sdk_li = [s for s in sdks if s == config.sdk]
   if len(sdk_li) != 1:
@@ -120,7 +120,7 @@ def main():
     Log.warn("Using the default device: \"{0}\"".format(default_device))
 
   if config.build:
-    builder = XCodeBuildBase.create_builder(target_li[0], sdk_li[0], config.build_dir, config.debug, config.verbose)
+    builder = XCodeBuildBase.create_builder(config)
     if config.build_report_format:
       if config.build_report_format == "xml":
         result_formatter = BuildXMLFormatter(config.build_report_file)
@@ -129,7 +129,7 @@ def main():
         result_formatter = None
     else:
       result_formatter = None
-    if not builder.build(config.clean, config.run, config.device, result_formatter):
+    if not builder.build(result_formatter):
       result_formatter.save()
       Log.fatal("Failed to build! Aborting...")
 
