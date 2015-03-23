@@ -1,6 +1,6 @@
 from os import listdir
 from operator import contains
-from strawberry_config import Config
+from xc_config import Config
 from xc_testcase import TestCase
 from xc_utils import get_app_path
 from commandline_formatter import CommandlineResultFormatter

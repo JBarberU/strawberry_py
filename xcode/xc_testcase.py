@@ -6,7 +6,7 @@ from number_helper import number_string_with_postfix
 from output_error import OutputError
 from pretty_output_pipe import PrettyOutputPipe
 from commander import Commander
-from strawberry_config import Config
+from xc_config import Config
 from shutil import rmtree
 from log import Log
 from colors import Colors
