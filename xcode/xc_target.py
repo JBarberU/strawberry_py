@@ -1,6 +1,8 @@
 sdks = [
         "iphonesimulator8.1",
-        "iphoneos8.1"
+        "iphoneos8.1",
+        "iphonesimulator8.2",
+        "iphoneos8.2"
        ]
 
 class Target:
