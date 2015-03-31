@@ -50,26 +50,31 @@ class XCodeBuild61(XCodeBuildBase):
     for t in self.config.sel_targets:
       if result_formatter:
         result_formatter.start(pipe)
+      build_ipa = self.config.export_format == "ipa"
+
       Log.msg("Building \"{0}\"".format(t.scheme))
       commander = Commander(pipe, self.config.debug)
       cmd = [
               "xcodebuild",
               "-sdk", self.config.sdk,
               "-derivedDataPath", self.config.build_dir,
-              "-archivePath", self.config.build_dir,
               "-configuration", t.configuration,
               "-scheme", t.scheme,
               "CODE_SIGN_IDENTITY=\"{0}\"".format(t.codesigning_identity)
             ]
+
       if t.provisioning_profile:
         cmd.append("PROVISIONING_PROFILE=\"{0}\"".format(t.provisioning_profile))
 
+      if build_ipa:
+        cmd += [
+                  "archive",
+                  "-archivePath",
+                  "{0}/archive".format(self.config.build_dir)
+               ]
+
       if self.config.clean:
         cmd.append("clean")
-
-      build_ipa = self.config.export_format == "ipa"
-      if build_ipa:
-        cmd.append("archive")
 
       ret_code = commander.run_command(cmd)
       if result_formatter:
@@ -84,9 +89,8 @@ class XCodeBuild61(XCodeBuildBase):
                 "xcodebuild",
                 "-exportArchive",
                 "-exportFormat", "ipa",
-                "-archivePath", "{0}.xcarchive".format(self.config.build_dir),
+                "-archivePath", "{0}/archive.xcarchive".format(self.config.build_dir),
                 "-exportPath", "{0}/{1}.ipa".format(self.config.build_dir, t.app_name),
-                "-exportProvisioningProfile", t.provisioning_profile
               ]
         ret_code = commander.run_command(cmd)
 
