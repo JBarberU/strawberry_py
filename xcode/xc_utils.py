@@ -16,19 +16,18 @@ def get_device(device_name, debug=False):
 
   return ""
 
-def get_app_path(config):
+def get_app_path(config, target):
   is_simulator = sdk_regex = re.compile(".*simulator.*").match(config.sdk)
   __paths = [
-              "{0}/Build/Products/{1}-{2}/{3}",
-              "{0}/Products/{1}-{2}/{3}",
+              "{0}/Build/Products/{1}-{2}/{3}.{4}",
+              "{0}/Products/{1}-{2}/{3}.{4}",
             ]
 
   Log.info("sdk: {0}".format(config.sdk))
 
   paths_tried = []
   for p in __paths:
-    target = config.sel_target
-    app_path = p.format(config.build_dir, target.configuration, "iphonesimulator" if is_simulator else "iphoneos", target.app_name)
+    app_path = p.format(config.build_dir, target.configuration, "iphonesimulator" if is_simulator else "iphoneos", target.app_name, config.export_format)
     paths_tried.append(app_path)
     if config.debug:
       Log.info("Looking for {0} in {1}".format(target.app_name, app_path))

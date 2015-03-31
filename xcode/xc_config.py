@@ -30,7 +30,7 @@ class Config:
       "instruments_trace_dir": self.instruments_trace_dir,
       "device": self.device,
       "clean": self.clean,
-      "target": self.target,
+      "targets": self.targets,
       "sdk": self.sdk,
       "run": self.run,
       "build": self.build,
@@ -41,16 +41,13 @@ class Config:
       "reinstall": self.reinstall,
       "verbose": self.verbose,
       "debug": self.debug,
-      "foo": self.foo,
-      "targets": Target.serialize(self.targets),
-      "codesigning_identity": self.codesign_identity,
-      "provisioning_profile": self.provisioning_profile,
+      "export_format": self.export_format,
+      "available_targets": Target.serialize(self.available_targets),
     }
 
     return json_object
 
   def deserialize(self, json_object):
-    print("deserialize")
     self.init_mem(json_object, "tests_dir",             "integration/javascript/iphone")
     self.init_mem(json_object, "build_dir",             "build")
     self.init_mem(json_object, "build_report_format",   "xml")
@@ -61,7 +58,7 @@ class Config:
     self.init_mem(json_object, "instruments_trace_dir", "instruments")
     self.init_mem(json_object, "device",                None)
     self.init_mem(json_object, "clean",                 False)
-    self.init_mem(json_object, "target",                None)
+    self.init_mem(json_object, "targets",               [])
     self.init_mem(json_object, "sdk",                   "iphoneos8.1")
     self.init_mem(json_object, "run",                   False)
     self.init_mem(json_object, "build",                 True)
@@ -72,14 +69,12 @@ class Config:
     self.init_mem(json_object, "reinstall",             False)
     self.init_mem(json_object, "verbose",               False)
     self.init_mem(json_object, "debug",                 False)
-    self.init_mem(json_object, "foo",                   "bar")
-    self.init_mem(json_object, "codesigning_identity",  "")
-    self.init_mem(json_object,  "provisioning_profile",  "")
+    self.init_mem(json_object, "export_format",         "app")
 
     try:
-      self.targets = Target.deserialize(json_object["targets"])
+      self.available_targets = Target.deserialize(json_object["available_targets"])
     except KeyError:
-      self.targets = self.example_targets
+      self.available_targets = self.example_targets
 
   def init_mem(self, json_object, key, default):
     try:
@@ -91,18 +86,24 @@ class Config:
   example_targets = [
     Target(name="foo",
            scheme="Foo Scheme",
-           app_name="Foo.app",
+           app_name="Foo",
            configuration="Debug",
-           bundle_id="com.example.MyApp-Foo"),
+           bundle_id="com.example.MyApp-Foo",
+           codesigning_identity="iPhone Devolopment: Build Certificate",
+           provisioning_profile=""),
     Target(name="bar",
            scheme="Bar Scheme",
-           app_name= "Bar.app",
+           app_name= "Bar",
            configuration="Release",
-           bundle_id="com.example.MyApp-Bar"),
+           bundle_id="com.example.MyApp-Bar",
+           codesigning_identity="iPhone Devolopment: Build Certificate",
+           provisioning_profile=""),
     Target(name="bar_debug",
            scheme="Bar Scheme",
-           app_name= "Bar.app",
+           app_name= "Bar",
            configuration="Debug",
-           bundle_id="com.example.MyApp-Bar")
+           bundle_id="com.example.MyApp-Bar",
+           codesigning_identity="iPhone Devolopment: Build Certificate",
+           provisioning_profile="")
   ]
   

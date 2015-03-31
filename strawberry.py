@@ -43,7 +43,7 @@ def main():
 
   parser = argparse.ArgumentParser()
   parser.add_argument("-c", "--clean", action="store_true", help="Clean befroe build")
-  parser.add_argument("-t", "--target", help="The target")
+  parser.add_argument("-t", "--targets", nargs="+", help="The target")
   parser.add_argument("--list-targets", action="store_true", help="Prints the available targets")
   parser.add_argument("-s", "--sdk", help="The SDK")
   parser.add_argument("--list-sdks", action="store_true", help="Lists the available SDKs")
@@ -60,8 +60,8 @@ def main():
 
   if args.clean:
     config.clean = True
-  if args.target:
-    config.target = args.target
+  if args.targets:
+    config.targets = args.targets
   if args.sdk:
     config.sdk = args.sdk
   if args.run:
@@ -93,13 +93,13 @@ def main():
     print_sdks()
     exit(0)
 
-  if config.target == None:
-    Log.fatal("You need to provide a target, try --list-targets to see which are available or --help to see the help")
+  if not config.targets:
+    Log.fatal("You need to provide at least none target, try --list-targets to see which are available or --help to see the help")
   else:
-    t_li = [x for x in config.targets if x.name == config.target]
-    if len(t_li) > 1:
+    t_li = [x for x in config.available_targets if x.name in config.targets]
+    if len(t_li) == 0:
       Log.fatal("You can't use a non-unique target name")
-    config.sel_target = t_li[0]
+    config.sel_targets = t_li
 
   sdk_li = [s for s in sdks if s == config.sdk]
   if len(sdk_li) != 1:

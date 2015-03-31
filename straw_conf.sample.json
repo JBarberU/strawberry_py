@@ -9,7 +9,7 @@
   "instruments_trace_dir": "instruments",
   "device": null,
   "clean": false,
-  "target": null,
+  "targets": null,
   "sdk": "iphoneos8.1",
   "run": false,
   "build": true,
@@ -22,28 +22,35 @@
   "debug": false,
   "codesigning_identity": "iPhone Devolopment: Build Certificate",
   "provisioning_profile": "",
+  "export_format": "app",
 
-  "targets": [
+  "available_targets": [
     {
       "name": "foo",
       "scheme": "Foo Scheme",
       "app_name": "Foo.app",
       "configuration": "Debug",
-      "bundle_id": "com.example.MyApp-Foo"
+      "bundle_id": "com.example.MyApp-Foo",
+      "codesigning_identity": "iPhone Devolopment: Build Certificate",
+      "provisioning_profile": ""
     },
     {
       "name": "bar",
       "scheme": "Bar Scheme",
       "app_name":  "Bar.app",
       "configuration": "Release",
-      "bundle_id": "com.example.MyApp-Bar"
+      "bundle_id": "com.example.MyApp-Bar",
+      "codesigning_identity": "iPhone Devolopment: Build Certificate",
+      "provisioning_profile": ""
     },
     {
       "name": "bar_debug",
       "scheme": "Bar Scheme",
       "app_name":  "Bar.app",
       "configuration": "Debug",
-      "bundle_id": "com.example.MyApp-Bar"
+      "bundle_id": "com.example.MyApp-Bar",
+      "codesigning_identity": "iPhone Devolopment: Build Certificate",
+      "provisioning_profile": ""
     }
   ]
 }

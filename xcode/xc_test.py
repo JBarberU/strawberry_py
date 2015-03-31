@@ -58,6 +58,10 @@ formatter_map = {
                 }
 
 def test(config):
+  if len(config.sel_targets) > 1:
+    Log.err("There isn't currently any support for running tests with multiple targets")
+    return 
+
   if config.focus:
     focus_object = TestFocusObject(config.focus)
   elif config.exclude:
@@ -93,7 +97,7 @@ def test(config):
         ret_code = commander.run_command(["xcrun","simctl", "uninstall", config.device, target.bundle_id])
         if not (ret_code == 0 or ret_code == 1):
           Log.err("Uninstall failed!")
-        ret_code = commander.run_command(["xcrun","simctl", "install", config.device, get_app_path(config)])
+        ret_code = commander.run_command(["xcrun","simctl", "install", config.device, get_app_path(config, config.sel_targets[0])])
         if not (ret_code == 0 or ret_code == 1):
           Log.fatal("Install failed! error code: {}".format(ret_code))
 

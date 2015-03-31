@@ -44,13 +44,17 @@ class TestCase:
     return (test_results_dir, instruments_trace_dir)
 
   def run(self):
+    if len(self.config.sel_targets) > 1:
+      Log.err("Running tests for multiple targets is currintly unsupported")
+      return
+
     self.run_number += 1
     Log.print_msg("Running test", "{0} ({1} try)".format(self.file_name, number_string_with_postfix(self.run_number)), Colors.CYAN_FG, True)
 
     (test_results_dir, instruments_trace_dir) = self.__create_folders()
     pipe = PrettyOutputPipe(unacceptable_output = [".*Error ?: ?", ".*Fail ?: ?"])
     try:
-      app_path = get_app_path(self.config)
+      app_path = get_app_path(self.config, self.config.sel_targets[0])
       if not os.path.exists(app_path):
         Log.err("The app does't seem to exist")
         exit(1)

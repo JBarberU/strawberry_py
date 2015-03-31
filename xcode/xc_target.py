@@ -6,15 +6,24 @@ sdks = [
        ]
 
 class Target:
-  def __init__(self, name, scheme, app_name, configuration, bundle_id):
+  def __init__(self,
+               name,
+               scheme,
+               app_name,
+               configuration,
+               bundle_id,
+               provisioning_profile,
+               codesigning_identity):
     self.name = name
     self.scheme = scheme
     self.app_name = app_name
     self.configuration = configuration
     self.bundle_id = bundle_id
+    self.provisioning_profile = provisioning_profile
+    self.codesigning_identity = codesigning_identity
 
   def __str__(self):
-    return "{ name: " + self.name + ", scheme: " + self.scheme + ", bundle_id: " + self.bundle_id + " }"
+    return "{ name: {0}, scheme: {1}, bundle_id: {2}, provisioning_profile: {3}, codesigning_identity: {4} }".format(self.name, self.scheme, self.bundle_id, self.provisioning_profile, self.codesigning_identity)
 
   @classmethod
   def serialize(cls, targets = []):
@@ -25,7 +34,9 @@ class Target:
         "scheme": tgt.scheme,
         "app_name": tgt.app_name,
         "configuration": tgt.configuration,
-        "bundle_id": tgt.bundle_id
+        "bundle_id": tgt.bundle_id,
+        "codesigning_identity": tgt.codesigning_identity,
+        "provisioning_profile": tgt.provisioning_profile
       })
     return json_list
 
@@ -38,7 +49,9 @@ class Target:
         scheme=tgt["scheme"],
         app_name=tgt["app_name"],
         configuration=tgt["configuration"],
-        bundle_id=tgt["bundle_id"]
+        bundle_id=tgt["bundle_id"],
+        provisioning_profile=tgt["provisioning_profile"],
+        codesigning_identity=tgt["codesigning_identity"]
       ))
     return target_list
 
